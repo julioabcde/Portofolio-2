@@ -29,24 +29,19 @@ export default function About() {
                                     </div>
                                     <div>
                                         <h3 className="text-2xl font-bold">Julio</h3>
-                                        <p className="text-primary">Junior Front End Engineer</p>
+                                        <p className="text-primary">Frontend Developer</p>
                                     </div>
                                 </div>
 
-                                <div className="space-y-4 text-muted leading-relaxed">
+                                <div className="space-y-4 text-muted leading-relaxed text-justify">
                                     <p>
-                                        I&apos;m a passionate developer who loves transforming ideas into beautiful,
-                                        functional websites. My journey started with curiosity about how websites work,
-                                        and evolved into a deep passion for creating user-centric digital experiences.
+                                        An enthusiastic and dedicated developer with a strong interest in mobile development, web development, and full-stack engineering. I enjoy building user-centric applications across platforms and continuously improving my technical skills through hands-on projects and real-world problem solving.
                                     </p>
                                     <p>
-                                        I specialize in modern front-end technologies and believe in writing clean,
-                                        maintainable code. Every project is an opportunity to learn something new
-                                        and push my boundaries.
+                                        I am capable of contributing to the development of scalable, user-focused applications by writing clean, maintainable code and collaborating effectively within a team. My experience spans frontend development, UI design, backend integration, and database management, gained through academic projects and practical implementations.
                                     </p>
                                     <p>
-                                        When I&apos;m not coding, you can find me exploring new technologies,
-                                        contributing to open-source, or learning about UI/UX design principles.
+                                        I have experience as a Frontend Developer Intern, where I built and maintained web applications using Angular, integrated RESTful APIs, and improved code quality through refactoring and debugging.
                                     </p>
                                 </div>
 
@@ -69,49 +64,46 @@ export default function About() {
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="text-center p-4 rounded-xl bg-background">
                                     <span className="text-3xl font-bold gradient-text">1+</span>
-                                    <p className="text-sm text-muted mt-1">Years Coding</p>
+                                    <p className="text-sm text-muted mt-1">Year Experience</p>
                                 </div>
                                 <div className="text-center p-4 rounded-xl bg-background">
-                                    <span className="text-3xl font-bold gradient-text">10+</span>
+                                    <span className="text-3xl font-bold gradient-text">7+</span>
                                     <p className="text-sm text-muted mt-1">Projects</p>
                                 </div>
                                 <div className="text-center p-4 rounded-xl bg-background">
-                                    <span className="text-3xl font-bold gradient-text">4+</span>
-                                    <p className="text-sm text-muted mt-1">Technologies</p>
+                                    <span className="text-3xl font-bold gradient-text">3.69</span>
+                                    <p className="text-sm text-muted mt-1">GPA</p>
                                 </div>
                                 <div className="text-center p-4 rounded-xl bg-background">
-                                    <span className="text-3xl font-bold gradient-text">∞</span>
-                                    <p className="text-sm text-muted mt-1">Curiosity</p>
+                                    <span className="text-3xl font-bold gradient-text">1</span>
+                                    <p className="text-sm text-muted mt-1">Publication</p>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    {/* Location Card */}
+                    {/* Education Card */}
                     <div className="col-span-6 lg:col-span-2">
                         <div className="h-full p-6 rounded-2xl glassmorphism card-hover flex flex-col items-center justify-center text-center">
-                            <span className="text-4xl mb-3">📍</span>
-                            <p className="text-muted text-sm">Based in</p>
-                            <p className="font-semibold">Indonesia</p>
+                            <span className="text-4xl mb-3">🎓</span>
+                            <p className="text-muted text-sm">Studying at</p>
+                            <p className="font-semibold">Binus University</p>
+                            <p className="text-xs text-muted mt-1">Software Engineering</p>
                         </div>
                     </div>
 
-                    {/* Currently Learning */}
+                    {/* Experience Card */}
                     <div className="col-span-12 lg:col-span-3">
                         <div className="h-full p-6 rounded-2xl glassmorphism card-hover">
-                            <h4 className="text-sm font-mono text-muted mb-4">// Currently Learning</h4>
+                            <h4 className="text-sm font-mono text-muted mb-4">// Work Experience</h4>
                             <div className="space-y-3">
-                                <div className="flex items-center gap-3">
-                                    <span className="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center text-lg">📚</span>
-                                    <span className="text-sm">Advanced TypeScript</span>
-                                </div>
-                                <div className="flex items-center gap-3">
-                                    <span className="w-8 h-8 rounded-lg bg-purple-500/20 flex items-center justify-center text-lg">🎨</span>
-                                    <span className="text-sm">UI/UX Design</span>
-                                </div>
-                                <div className="flex items-center gap-3">
-                                    <span className="w-8 h-8 rounded-lg bg-green-500/20 flex items-center justify-center text-lg">⚡</span>
-                                    <span className="text-sm">Performance Optimization</span>
+                                <div className="flex items-start gap-3">
+                                    <span className="w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center text-lg shrink-0">💼</span>
+                                    <div>
+                                        <p className="text-sm font-medium">Frontend Developer Intern</p>
+                                        <p className="text-xs text-muted">PT Periksa Solusi Indonesia</p>
+                                        <p className="text-xs text-primary">Feb 2025 - Feb 2026</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>

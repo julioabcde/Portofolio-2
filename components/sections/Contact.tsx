@@ -1,11 +1,8 @@
-// ============================================
-// CONTACT DATA - Update with your info!
-// ============================================
-
 const contactInfo = {
-    email: "your.email@example.com",
-    linkedin: "https://linkedin.com/in/yourusername",
-    github: "https://github.com/yourusername",
+    email: "media.julio68@gmail.com",
+    phone: "+6281344717601",
+    linkedin: "https://www.linkedin.com/in/julio68",
+    github: "https://github.com/julio68",
 };
 
 export default function Contact() {
@@ -25,8 +22,8 @@ export default function Contact() {
                                 Let&apos;s work <span className="gradient-text">together</span>
                             </h2>
                             <p className="text-muted text-lg leading-relaxed">
-                                I&apos;m currently looking for new opportunities. Whether you have a
-                                project in mind, a question, or just want to connect — my inbox is always open!
+                                I&apos;m currently open to new opportunities. Whether you have a
+                                project in mind, a question, or just want to connect — feel free to reach out!
                             </p>
                         </div>
 
@@ -45,6 +42,25 @@ export default function Contact() {
                                 <div>
                                     <p className="text-sm text-muted">Email me at</p>
                                     <p className="font-medium group-hover:text-primary transition-colors">{contactInfo.email}</p>
+                                </div>
+                                <svg className="w-5 h-5 text-muted ml-auto group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                                </svg>
+                            </a>
+
+                            {/* Phone */}
+                            <a
+                                href={`tel:${contactInfo.phone}`}
+                                className="group flex items-center gap-4 p-4 rounded-xl glassmorphism hover:border-primary/50 transition-all"
+                            >
+                                <div className="w-12 h-12 rounded-xl bg-green-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
+                                    <svg className="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p className="text-sm text-muted">Call me at</p>
+                                    <p className="font-medium group-hover:text-primary transition-colors">{contactInfo.phone}</p>
                                 </div>
                                 <svg className="w-5 h-5 text-muted ml-auto group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
@@ -105,7 +121,7 @@ export default function Contact() {
 
                             <h3 className="text-2xl font-bold mb-4">Ready to start?</h3>
                             <p className="text-muted mb-8 max-w-sm mx-auto">
-                                Feel free to reach out. I&apos;m excited to hear about your project and explore how we can work together.
+                                I&apos;m excited to hear about your project and explore how we can work together.
                             </p>
 
                             <a

@@ -1,35 +1,53 @@
 const skills = [
     {
-        name: "React",
-        level: 85,
-        description: "Component-based UIs",
-        icon: "⚛️",
-        color: "from-[#61DAFB]/30 to-[#61DAFB]/10",
+        name: "JavaScript",
+        level: 90,
+        description: "Dynamic web development",
+        icon: "📜",
+        color: "from-[#F7DF1E]/30 to-[#F7DF1E]/10",
     },
     {
         name: "TypeScript",
-        level: 75,
+        level: 85,
         description: "Type-safe development",
         icon: "📘",
         color: "from-[#3178C6]/30 to-[#3178C6]/10",
     },
     {
-        name: "Next.js",
-        level: 70,
-        description: "Full-stack React framework",
-        icon: "▲",
-        color: "from-foreground/30 to-foreground/10",
+        name: "React / Next.js",
+        level: 85,
+        description: "Modern frontend frameworks",
+        icon: "⚛️",
+        color: "from-[#61DAFB]/30 to-[#61DAFB]/10",
     },
     {
-        name: "Tailwind CSS",
-        level: 90,
-        description: "Utility-first styling",
-        icon: "🎨",
-        color: "from-[#38BDF8]/30 to-[#38BDF8]/10",
+        name: "Angular",
+        level: 80,
+        description: "Enterprise web applications",
+        icon: "🅰️",
+        color: "from-[#DD0031]/30 to-[#DD0031]/10",
+    },
+    {
+        name: "PHP / Laravel",
+        level: 80,
+        description: "Backend development",
+        icon: "🐘",
+        color: "from-[#777BB4]/30 to-[#777BB4]/10",
+    },
+    {
+        name: "Java / Kotlin",
+        level: 75,
+        description: "Mobile & desktop apps",
+        icon: "☕",
+        color: "from-[#007396]/30 to-[#007396]/10",
     },
 ];
 
-const otherSkills = ["HTML5", "CSS3", "JavaScript", "Git", "VS Code", "Figma", "REST APIs", "Responsive Design"];
+const otherSkills = [
+    "Python", "C#", "C++", "SQL", "HTML5", "CSS3",
+    "REST APIs", "Firebase", "MySQL", "Git",
+    "Figma", "Android Studio", "VS Code"
+];
 
 export default function Skills() {
     return (
@@ -48,8 +66,9 @@ export default function Skills() {
                                 My <span className="gradient-text">Tech Stack</span>
                             </h2>
                             <p className="text-muted leading-relaxed">
-                                I specialize in modern front-end technologies to build responsive,
-                                performant, and accessible web applications. Here&apos;s what I work with daily.
+                                Experienced in full-stack development with expertise in modern frontend
+                                frameworks and backend technologies. Passionate about building scalable,
+                                user-focused applications.
                             </p>
 
                             {/* Other Skills */}

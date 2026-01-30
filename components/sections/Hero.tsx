@@ -43,16 +43,18 @@ export default function Hero() {
                                 <span className="gradient-text">Julio</span>
                                 <br />
                                 <span className="text-muted text-3xl md:text-4xl lg:text-5xl font-light">
-                                    Junior Front End Engineer
+                                    Frontend Developer
                                 </span>
                             </h1>
                         </div>
 
                         {/* Tagline */}
-                        <p className="text-xl md:text-2xl text-muted max-w-xl animate-fade-in-up" style={{ animationDelay: "0.2s" }}>
-                            <span className="text-primary font-semibold">Crafting Pixels</span> into Experiences —
-                            building beautiful, user-centric web applications with modern technologies.
-                        </p>
+                        <div className="animate-fade-in-up" style={{ animationDelay: "0.2s" }}>
+                            <blockquote className="text-xl md:text-2xl text-muted max-w-xl italic border-l-4 border-primary pl-4">
+                                &ldquo;Optimism is an occupational hazard of programming: feedback is the treatment.&rdquo;
+                            </blockquote>
+                            <p className="text-sm text-primary mt-2 pl-4">— Kent Beck</p>
+                        </div>
 
                         {/* CTA Buttons */}
                         <div className="flex flex-wrap gap-4 animate-fade-in-up" style={{ animationDelay: "0.3s" }}>
@@ -68,11 +70,19 @@ export default function Hero() {
                                 </svg>
                                 <span>Get In Touch</span>
                             </a>
+
+                            {/* Scroll Indicator */}
+                            <div className="flex items-center gap-3 text-muted animate-bounce">
+                                <div className="w-6 h-10 rounded-full border-2 border-muted flex justify-center pt-2">
+                                    <div className="w-1.5 h-3 bg-primary rounded-full animate-pulse" />
+                                </div>
+                                <span className="text-sm font-medium">Scroll to explore</span>
+                            </div>
                         </div>
 
                         {/* Tech Stack Pills */}
                         <div className="flex flex-wrap gap-3 pt-4 animate-fade-in-up" style={{ animationDelay: "0.4s" }}>
-                            {["React", "TypeScript", "Next.js", "Tailwind"].map((tech) => (
+                            {["Angular", "React", "TypeScript", "Laravel"].map((tech) => (
                                 <span
                                     key={tech}
                                     className="px-4 py-2 text-sm font-medium rounded-lg bg-surface border border-border hover:border-primary transition-colors"
@@ -106,19 +116,11 @@ export default function Hero() {
                                     <p className="pl-8"><span className="text-accent">&quot;UI/UX Design&quot;</span>,</p>
                                     <p className="pl-8"><span className="text-accent">&quot;Problem Solving&quot;</span></p>
                                     <p className="pl-4">],</p>
-                                    <p className="pl-4"><span className="text-primary">coffee</span>: <span className="text-blue-400">true</span> ☕</p>
+                                    <p className="pl-4"><span className="text-primary">coffee</span>: <span className="text-blue-400">true</span></p>
                                     <p>{"}"};</p>
                                 </div>
                             </div>
                         </div>
-                    </div>
-
-                    {/* Scroll Indicator - Left aligned */}
-                    <div className="absolute bottom-10 left-6 flex items-center gap-3 text-muted animate-bounce">
-                        <div className="w-6 h-10 rounded-full border-2 border-muted flex justify-center pt-2">
-                            <div className="w-1.5 h-3 bg-primary rounded-full animate-pulse" />
-                        </div>
-                        <span className="text-sm font-medium">Scroll to explore</span>
                     </div>
                 </div>
             </div>
