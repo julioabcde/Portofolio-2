@@ -108,7 +108,7 @@ export default function SplashScreen() {
                             data-aos-delay="750"
                             className="text-white font-semibold"
                         >
-                            Julio's Portfolio
+                            Julio&apos;s Portfolio
                         </span>
                     </h2>
                 </div>

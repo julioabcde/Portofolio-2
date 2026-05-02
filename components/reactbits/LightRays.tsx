@@ -57,7 +57,7 @@ const getAnchorAndDir = (
             return { anchor: [0.5 * w, (1 + outside) * h], dir: [0, -1] };
         case 'bottom-right':
             return { anchor: [w, (1 + outside) * h], dir: [0, -1] };
-        default: // "top-center"
+        default:
             return { anchor: [0.5 * w, -outside * h], dir: [0, 1] };
     }
 };
@@ -200,13 +200,13 @@ const LightRays: React.FC<LightRaysProps> = ({
             float cosAngle = dot(dirNorm, rayRefDirection);
 
             float distortedAngle = cosAngle + distortion * sin(iTime * 2.0 + length(sourceToCoord) * 0.01) * 0.2;
-            
+
             float spreadFactor = pow(max(distortedAngle, 0.0), 1.0 / max(lightSpread, 0.001));
 
             float distance = length(sourceToCoord);
             float maxDistance = iResolution.x * rayLength;
             float lengthFalloff = clamp((maxDistance - distance) / maxDistance, 0.0, 1.0);
-            
+
             float fadeFalloff = clamp((iResolution.x * fadeDistance - distance) / (iResolution.x * fadeDistance), 0.5, 1.0);
             float pulse = pulsating > 0.5 ? (0.8 + 0.2 * sin(iTime * speed * 3.0)) : 1.0;
 
@@ -221,7 +221,7 @@ const LightRays: React.FC<LightRaysProps> = ({
 
             void mainImage(out vec4 fragColor, in vec2 fragCoord) {
             vec2 coord = vec2(fragCoord.x, iResolution.y - fragCoord.y);
-            
+
             vec2 finalRayDir = rayDir;
             if (mouseInfluence > 0.0) {
                 vec2 mouseScreenPos = mousePos * iResolution.xy;
