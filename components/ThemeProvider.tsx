@@ -16,14 +16,17 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
-        setMounted(true);
-        // Check localStorage first, then system preference
-        const savedTheme = localStorage.getItem("theme") as Theme | null;
-        if (savedTheme) {
-            setTheme(savedTheme);
-        } else if (window.matchMedia("(prefers-color-scheme: light)").matches) {
-            setTheme("light");
-        }
+        const frame = window.requestAnimationFrame(() => {
+            setMounted(true);
+            const savedTheme = localStorage.getItem("theme") as Theme | null;
+            if (savedTheme) {
+                setTheme(savedTheme);
+            } else if (window.matchMedia("(prefers-color-scheme: light)").matches) {
+                setTheme("light");
+            }
+        });
+
+        return () => window.cancelAnimationFrame(frame);
     }, []);
 
     useEffect(() => {
@@ -37,8 +40,6 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
         setTheme((prev) => (prev === "dark" ? "light" : "dark"));
     };
 
-    // Always provide the context, but use the default theme if not mounted
-    // This prevents hydration mismatch while still providing context
     return (
         <ThemeContext.Provider value={{ theme: mounted ? theme : "dark", toggleTheme }}>
             {children}
