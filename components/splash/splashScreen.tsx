@@ -39,7 +39,7 @@ export default function SplashScreen() {
          */
         <section
             aria-label="Intro splash screen"
-            className="fixed inset-0 z-[9999] overflow-hidden bg-[#00072D]"
+            className="fixed inset-0 z-[9999] overflow-hidden bg-background"
         >
             <div
                 aria-hidden="true"
@@ -47,7 +47,7 @@ export default function SplashScreen() {
             >
                 <LightRays
                     raysOrigin="top-center"
-                    raysColor="#ffffff"
+                    raysColor="#2e5bff"
                     raysSpeed={1}
                     lightSpread={0.5}
                     rayLength={3}
@@ -76,7 +76,7 @@ export default function SplashScreen() {
                         <span
                             data-aos="fade-right"
                             data-aos-delay="0"
-                            className="text-white"
+                            className="text-foreground"
                         >
                             Hello
                         </span>
@@ -84,21 +84,17 @@ export default function SplashScreen() {
                         <span
                             data-aos="fade-down"
                             data-aos-delay="250"
-                            className="text-primary"
+                            className="text-secondary"
                         >
                             World
                         </span>
                     </h1>
 
-                    {/**
-                     * <h2>
-                     * - Secondary heading (context)
-                     */}
                     <h2 className="flex justify-center gap-4 text-3xl font-normal">
                         <span
                             data-aos="fade-up"
                             data-aos-delay="500"
-                            className="text-slate-400"
+                            className="text-muted"
                         >
                             Welcome to
                         </span>
@@ -106,7 +102,7 @@ export default function SplashScreen() {
                         <span
                             data-aos="fade-left"
                             data-aos-delay="750"
-                            className="text-white font-semibold"
+                            className="text-foreground font-semibold"
                         >
                             Julio&apos;s Portfolio
                         </span>

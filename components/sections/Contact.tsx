@@ -60,7 +60,7 @@ export default function Contact() {
   return (
     <section
       id="contact"
-      className="relative py-24 overflow-hidden"
+      className="relative py-section-y-sm md:py-section-y-md lg:py-section-y-lg overflow-hidden"
       aria-labelledby="contact-heading"
     >
       {/* Top border accent */}
@@ -68,7 +68,7 @@ export default function Contact() {
         <div className="absolute top-0 left-1/2 -translate-x-1/2 h-px w-3/4 bg-gradient-to-r from-transparent via-border to-transparent" />
       </div>
 
-      <div className="relative mx-auto w-full max-w-6xl px-6">
+      <div className="container-page relative">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
 
           {/* LEFT COLUMN - Heading + info */}
@@ -103,7 +103,7 @@ export default function Contact() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={link.label}
-                  className="group flex h-11 w-11 items-center justify-center rounded-xl
+                  className="group flex h-11 w-11 items-center justify-center rounded-md
                              border border-border text-sm font-mono text-muted overflow-hidden"
                 >
                   <FlipEffect
@@ -123,7 +123,7 @@ export default function Contact() {
 
           {/* RIGHT COLUMN - Form */}
           <div className="relative">
-            <div className="relative rounded-2xl border border-border bg-surface/40 backdrop-blur-sm p-6 md:p-8">
+            <div className="relative rounded-md border border-border bg-surface/40 backdrop-blur-sm p-6 md:p-8">
               {submitted ? (
                 <div role="status" className="text-center py-12 space-y-4">
                   <p className="text-4xl" aria-hidden="true">✓</p>
@@ -165,7 +165,7 @@ export default function Contact() {
                   {error && (
                     <div
                       role="alert"
-                      className="rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-400"
+                      className="rounded-lg border border-red-500/40 bg-red-500/10 px-4 py-3 text-sm text-red-700"
                     >
                       {error}
                     </div>
@@ -187,12 +187,12 @@ export default function Contact() {
                         required
                         autoComplete="given-name"
                         placeholder="John"
-                        className="w-full rounded-lg border border-border bg-slate-800/80 px-4 py-3
-                                   text-sm text-white caret-primary placeholder:text-slate-400
+                        className="w-full rounded-lg border border-border bg-surface px-4 py-3
+                                   text-sm text-foreground caret-secondary placeholder:text-muted/60
                                    transition-all duration-300
-                                   hover:border-muted/50 hover:bg-slate-800
-                                   focus:border-primary focus:bg-slate-700/80 focus:outline-none
-                                   focus:ring-2 focus:ring-primary/20 focus:shadow-[0_0_20px_rgba(var(--color-primary-rgb),0.15)]"
+                                   hover:border-muted/50
+                                   focus:border-secondary focus:outline-none
+                                   focus:ring-2 focus:ring-secondary/20"
                       />
                     </div>
                     <div>
@@ -209,12 +209,12 @@ export default function Contact() {
                         required
                         autoComplete="family-name"
                         placeholder="Doe"
-                        className="w-full rounded-lg border border-border bg-slate-800/80 px-4 py-3
-                                   text-sm text-white caret-primary placeholder:text-slate-400
+                        className="w-full rounded-lg border border-border bg-surface px-4 py-3
+                                   text-sm text-foreground caret-secondary placeholder:text-muted/60
                                    transition-all duration-300
-                                   hover:border-muted/50 hover:bg-slate-800
-                                   focus:border-primary focus:bg-slate-700/80 focus:outline-none
-                                   focus:ring-2 focus:ring-primary/20 focus:shadow-[0_0_20px_rgba(var(--color-primary-rgb),0.15)]"
+                                   hover:border-muted/50
+                                   focus:border-secondary focus:outline-none
+                                   focus:ring-2 focus:ring-secondary/20"
                       />
                     </div>
                   </div>
@@ -234,12 +234,12 @@ export default function Contact() {
                       required
                       autoComplete="email"
                       placeholder="john@example.com"
-                      className="w-full rounded-lg border border-border bg-slate-800/80 px-4 py-3
-                                 text-sm text-white caret-primary placeholder:text-slate-400
+                      className="w-full rounded-lg border border-border bg-surface px-4 py-3
+                                 text-sm text-foreground caret-secondary placeholder:text-muted/60
                                  transition-all duration-300
-                                 hover:border-muted/50 hover:bg-slate-800
-                                 focus:border-primary focus:bg-slate-700/80 focus:outline-none
-                                 focus:ring-2 focus:ring-primary/20 focus:shadow-[0_0_20px_rgba(var(--color-primary-rgb),0.15)]"
+                                 hover:border-muted/50
+                                 focus:border-secondary focus:outline-none
+                                 focus:ring-2 focus:ring-secondary/20"
                     />
                   </div>
 
@@ -257,21 +257,21 @@ export default function Contact() {
                       required
                       rows={5}
                       placeholder="Tell me about your project..."
-                      className="w-full resize-y rounded-lg border border-border bg-slate-800/80 px-4 py-3
-                                 text-sm text-white caret-primary placeholder:text-slate-400
+                      className="w-full resize-y rounded-lg border border-border bg-surface px-4 py-3
+                                 text-sm text-foreground caret-secondary placeholder:text-muted/60
                                  transition-all duration-300
-                                 hover:border-muted/50 hover:bg-slate-800
-                                 focus:border-primary focus:bg-slate-700/80 focus:outline-none
-                                 focus:ring-2 focus:ring-primary/20 focus:shadow-[0_0_20px_rgba(var(--color-primary-rgb),0.15)]"
+                                 hover:border-muted/50
+                                 focus:border-secondary focus:outline-none
+                                 focus:ring-2 focus:ring-secondary/20"
                     />
                   </div>
 
                   {/* Footer: terms + submit */}
                   <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pt-2">
-                    <p className="text-[11px] text-muted/60 max-w-[220px] leading-relaxed">
+                    <p className="text-[11px] text-muted/70 max-w-[220px] leading-relaxed">
                       <span className="text-primary">Your message</span> will be sent directly to my email.
                       <br />
-                      I typically respond within <span className="text-red-400">24-48 hours</span>.
+                      I typically respond within <span className="text-secondary">24-48 hours</span>.
                     </p>
 
                     <button

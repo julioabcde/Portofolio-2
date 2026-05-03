@@ -1,37 +1,38 @@
 'use client'
 
 import Image from 'next/image'
+import { ImageOff } from 'lucide-react'
 import { Project } from '@/types/project'
 
 interface ProjectCardProps {
   project: Project
 }
 
-/**
- * Reusable project card component.
- * Renders at a fixed aspect ratio for the image area
- * and consistent padding/spacing for content, ensuring
- * all cards in the grid look uniform.
- */
 export default function ProjectCard({ project }: ProjectCardProps) {
   return (
     <article
-      className="group flex flex-col rounded-2xl border border-border bg-surface/40
+      className="group flex flex-col rounded-md border border-border bg-surface/40
                  backdrop-blur-sm overflow-hidden transition-all duration-300
-                 hover:border-primary hover:bg-surface/60
-                 hover:shadow-[0_0_30px_rgba(var(--color-primary-rgb),0.15)]"
+                 hover:border-primary hover:bg-surface/60"
     >
-      {/* Image container with fixed 16:9 aspect ratio */}
       <figure className="relative aspect-video w-full overflow-hidden bg-background/50">
-        <Image
-          src={project.image}
-          alt={`Screenshot of ${project.title}`}
-          fill
-          sizes="(max-width: 768px) 100vw, 50vw"
-          className="object-cover transition-transform duration-500 group-hover:scale-105"
-        />
+        {project.image ? (
+          <Image
+            src={project.image}
+            alt={`Screenshot of ${project.title}`}
+            fill
+            sizes="(max-width: 768px) 100vw, 50vw"
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
+          />
+        ) : (
+          <div
+            aria-hidden="true"
+            className="absolute inset-0 flex items-center justify-center bg-surface/60 text-muted"
+          >
+            <ImageOff className="h-10 w-10 opacity-40" />
+          </div>
+        )}
 
-        {/* Featured badge */}
         {project.featured && (
           <span
             className="absolute top-3 left-3 inline-flex items-center gap-1.5 rounded-full
@@ -42,7 +43,6 @@ export default function ProjectCard({ project }: ProjectCardProps) {
           </span>
         )}
 
-        {/* Hover overlay with action links */}
         <div
           aria-hidden="true"
           className="absolute inset-0 flex items-center justify-center gap-3
@@ -52,9 +52,9 @@ export default function ProjectCard({ project }: ProjectCardProps) {
           {project.liveUrl && (
             <a
               href={project.liveUrl}
-              className="rounded-lg border border-white/20 bg-primary px-4 py-2
+              className="rounded-md border border-white/20 bg-primary px-4 py-2
                          text-xs font-medium text-white transition-colors
-                         hover:bg-primary/80"
+                         hover:bg-secondary"
               aria-label={`View live demo of ${project.title}`}
             >
               Live Demo &#8599;
@@ -63,7 +63,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
           {project.repoUrl && (
             <a
               href={project.repoUrl}
-              className="rounded-lg border border-white/30 bg-white/10 px-4 py-2
+              className="rounded-md border border-white/30 bg-white/10 px-4 py-2
                          text-xs font-medium text-white transition-colors
                          hover:bg-white/20"
               aria-label={`View source code of ${project.title}`}
@@ -74,9 +74,8 @@ export default function ProjectCard({ project }: ProjectCardProps) {
         </div>
       </figure>
 
-      {/* Card body */}
       <div className="flex flex-1 flex-col p-5 border-t border-border transition-colors duration-300 group-hover:border-primary">
-        <h3 className="text-lg font-semibold mb-2 group-hover:text-primary transition-colors duration-300">
+        <h3 className="text-lg font-semibold mb-2 group-hover:text-secondary transition-colors duration-300">
           {project.title}
         </h3>
 
@@ -84,7 +83,6 @@ export default function ProjectCard({ project }: ProjectCardProps) {
           {project.description}
         </p>
 
-        {/* Tags / tech stack */}
         <ul className="flex flex-wrap gap-2" role="list" aria-label="Technologies used">
           {project.tags.map((tag) => (
             <li

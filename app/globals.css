@@ -2,39 +2,56 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+  .container-page {
+    @apply mx-auto w-full max-w-container;
+    @apply px-margin-x-sm md:px-margin-x-md lg:px-margin-x-lg;
+  }
+}
+
 :root {
   /* Brand */
-  --color-primary: #10b981;
-  --color-primary-light: #34d399;
-  --color-accent: #6ee7b7;
+  --color-primary: #000000;
+  --color-primary-light: #1b1b1b;
+  --color-accent: #000000;
+
+  /* Secondary */
+  --color-secondary: #2e5bff;
+  --color-secondary-hover: #0040e0;
 
   /* Background layers */
-  --color-background: #0a0a0f;
-  --color-background-secondary: #111118;
-  --color-surface: #1a1a24;
+  --color-background: #fbf9f9;
+  --color-background-secondary: #f5f3f3;
+  --color-surface: #efeded;
 
   /* Text */
-  --color-text: #f8fafc;
-  --color-text-secondary: #94a3b8;
+  --color-text: #1b1c1c;
+  --color-text-secondary: #4c4546;
 
   /* UI */
-  --color-border: #2d2d3a;
+  --color-border: #cfc4c5;
 
   /* Effects */
   --gradient-primary: linear-gradient(
     135deg,
-    #6ee7b7 0%,
-    #10b981 50%,
-    #059669 100%
+    #2e5bff 0%,
+    #0040e0 50%,
+    #001a8c 100%
   );
 
-  --shadow-glow: 0 0 30px rgba(16, 185, 129, 0.4);
-  --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.3);
-  --radius: 12px;
+  --shadow-glow: 0 0 30px rgba(46, 91, 255, 0.4);
+  --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.1);
+
+  /* Radius */
+  --radius: 4px;
 }
 
 html {
   scroll-behavior: smooth;
+}
+
+section[id] {
+  scroll-margin-top: 80px;
 }
 
 @media (prefers-reduced-motion: reduce) {

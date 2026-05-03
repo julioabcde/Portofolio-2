@@ -80,7 +80,7 @@ export default function TechStackMarquee() {
             <div className="max-w-[500px]">
                 <div className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-4">
                     {/* Label */}
-                    <span className="text-xs font-medium uppercase tracking-[0.2em] text-slate-400">
+                    <span className="text-xs font-medium uppercase tracking-[0.2em] text-muted">
                         Tech Stack
                     </span>
 
