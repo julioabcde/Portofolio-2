@@ -29,19 +29,19 @@ export default function Hero() {
     >
       {/* Ambient background */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-0">
-        <div className="absolute -top-32 -left-32 h-[480px] w-[480px] rounded-full bg-primary/5 blur-3xl" />
-        <div className="absolute -bottom-40 -right-40 h-[560px] w-[560px] rounded-full bg-accent/5 blur-3xl" />
+        <div className="absolute -top-32 -left-32 h-[480px] w-[480px] rounded-full bg-secondary/5 blur-3xl" />
+        <div className="absolute -bottom-40 -right-40 h-[560px] w-[560px] rounded-full bg-secondary/5 blur-3xl" />
       </div>
 
       {/* Main container */}
-      <div className="relative mx-auto w-full max-w-6xl px-6 py-20">
-        <div className="grid grid-cols-1 lg:grid-cols-[1.15fr_0.85fr] gap-10 items-center">
+      <div className="container-page relative py-section-y-sm md:py-section-y-md lg:py-section-y-lg">
+        <div className="grid grid-cols-1 lg:grid-cols-[1.15fr_0.85fr] gap-8 lg:gap-12 items-center">
 
           {/* LEFT — Narrative */}
-          <div className="order-1 space-y-10">
+          <div className="order-1 space-y-header-gap">
 
             {/* Identity cluster */}
-            <div className="space-y-4">
+            <div className="space-y-label-gap">
               <p className="inline-block rounded-full border border-border bg-surface/60 px-4 py-1.5 text-sm font-mono text-muted backdrop-blur-sm">
                 &lt;Hello World! /&gt;
               </p>
@@ -74,7 +74,7 @@ export default function Hero() {
             </figure>
 
             {/* Action cluster */}
-            <div className="space-y-4">
+            <div className="space-y-label-gap">
 
               <nav aria-label="Quick links" className="flex flex-wrap gap-4">
                 <a
@@ -134,7 +134,7 @@ export default function Hero() {
                 aria-label="Code snippet showing developer profile"
                 className="relative transition-transform duration-700 hover:-translate-y-1"
               >
-                <div className="rounded-2xl bg-surface/60 backdrop-blur-md border border-border p-4 shadow-2xl">
+                <div className="rounded-md bg-surface/60 backdrop-blur-md border border-border p-4 shadow-2xl">
                   <div aria-hidden="true" className="mb-3 flex items-center gap-2 border-b border-border/50 pb-2">
                     <span className="h-3 w-3 rounded-full bg-red-500/80" />
                     <span className="h-3 w-3 rounded-full bg-yellow-500/80" />
@@ -169,7 +169,7 @@ export default function Hero() {
                 aria-label="Terminal output showing successful build"
                 className="absolute left-1/2 top-[92%] -translate-x-1/2 mt-2 w-56"
               >
-                <div className="rounded-xl bg-surface/70 backdrop-blur-md border border-border p-3 shadow-lg">
+                <div className="rounded-md bg-surface/70 backdrop-blur-md border border-border p-3 shadow-lg">
                   <p className="font-mono text-[11px] text-muted/70 mb-1">~/portfolio</p>
                   <p className="font-mono text-xs">
                     <span className="text-green-400">$</span> npm run build
