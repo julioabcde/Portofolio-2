@@ -16,7 +16,7 @@ export const PROJECTS: Project[] = [
     title: 'Personal Portfolio',
     description:
       'My personal portfolio website showcasing projects and skills, built with modern web technologies and semantic HTML.',
-    image: '',
+    image: null,
     tags: ['Next.js', 'TypeScript', 'Tailwind CSS'],
     liveUrl: '#',
     repoUrl: '#',
@@ -26,7 +26,7 @@ export const PROJECTS: Project[] = [
     title: 'Periksa.id Dashboard',
     description:
       'Healthcare reporting modules, dashboard widgets, and patient screening systems for hospital clients.',
-    image: '',
+    image: null,
     tags: ['React', 'TypeScript', 'REST API'],
     liveUrl: '#',
   },
@@ -35,7 +35,7 @@ export const PROJECTS: Project[] = [
     title: 'Project Four',
     description:
       'A short description of another project you have worked on. Replace this placeholder with real content.',
-    image: '',
+    image: null,
     tags: ['React', 'Node.js', 'MongoDB'],
     repoUrl: '#',
   },

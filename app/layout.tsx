@@ -1,29 +1,32 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import { ThemeProvider } from "@/components/ThemeProvider";
+import { Geist_Mono, Inter, Playfair_Display, Space_Mono } from "next/font/google";
 import "./globals.css";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+import LenisProvider from "@/components/providers/LenisProvider";
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: "Julio | Junior Front End Engineer",
-  description: "Crafting Pixels into Experiences - Portfolio of Julio, a passionate Junior Front End Engineer specializing in React, TypeScript, Next.js, and Tailwind CSS.",
-  keywords: ["Front End Developer", "React", "TypeScript", "Next.js", "Tailwind CSS", "Web Developer", "Portfolio"],
-  authors: [{ name: "Julio" }],
-  openGraph: {
-    title: "Julio | Junior Front End Engineer",
-    description: "Crafting Pixels into Experiences - Portfolio showcasing modern web development skills.",
-    type: "website",
-  },
-};
+const inter = Inter({
+  variable: "--font-inter",
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+});
+
+const playfair = Playfair_Display({
+  variable: "--font-playfair",
+  subsets: ["latin"],
+  weight: ["400", "600", "700", "800"],
+  style: ["normal", "italic"],
+});
+
+const spaceMono = Space_Mono({
+  variable: "--font-space-mono",
+  subsets: ["latin"],
+  weight: ["400", "700"],
+});
+
 
 export default function RootLayout({
   children,
@@ -36,11 +39,9 @@ export default function RootLayout({
         <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistMono.variable} ${inter.variable} ${playfair.variable} ${spaceMono.variable} antialiased`}
       >
-        <ThemeProvider>
-          {children}
-        </ThemeProvider>
+        <LenisProvider>{children}</LenisProvider>
       </body>
     </html>
   );

@@ -28,10 +28,3 @@ export function checkRateLimit(ip: string): boolean {
   entry.count++
   return false
 }
-
-/**
- * Clear all rate limit entries (useful for testing)
- */
-export function clearRateLimits(): void {
-  rateLimitStore.clear()
-}
