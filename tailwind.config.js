@@ -1,14 +1,4 @@
-/** @type {import('tailwindcss').Config} */
-// Token contracts:
-//   margin-x-*  → page-content side padding (sections, body content)
-//   header-x-*  → header/footer side padding (slightly tighter than margin-x)
-//   section-y-* → vertical padding for section blocks
-//   header-gap  → gap between major header clusters within a section (48px)
-//   label-gap   → gap inside a single cluster (label + heading + cta) (24px)
-//   rule-gap    → gap above/below a section's ruled divider (80px)
-//   rule-gap-sm → mobile/tablet variant of rule-gap (48px)
 module.exports = {
-	darkMode: ['class'],
 	content: [
 		'./app/**/*.{js,ts,jsx,tsx}',
 		'./components/**/*.{js,ts,jsx,tsx}',
@@ -31,18 +21,17 @@ module.exports = {
 				surface: 'var(--color-surface)',
 				foreground: 'var(--color-text)',
 				muted: 'var(--color-text-secondary)',
+				subtle: 'var(--color-text-muted)',
 				border: 'var(--color-border)',
 
 				card: 'var(--color-surface)',
 			},
 
 			spacing: {
-				// Section vertical padding
 				'section-y-sm': '64px',
 				'section-y-md': '96px',
 				'section-y-lg': '120px',
 
-				// Horizontal margins (container padding)
 				'margin-x-sm': '24px',
 				'margin-x-md': '40px',
 				'margin-x-lg': '64px',
@@ -51,7 +40,6 @@ module.exports = {
 				'header-x-md': '32px',
 				'header-x-lg': '48px',
 
-				// Inter-element vertical rhythm
 				'header-gap': '48px',
 				'label-gap': '24px',
 				'rule-gap': '80px',
@@ -62,7 +50,6 @@ module.exports = {
 				'container': '1440px',
 			},
 
-			// ─── EXISTING — JANGAN DIHAPUS ──────────────────────────────────────
 			boxShadow: {
 				glow: 'var(--shadow-glow)',
 				card: 'var(--shadow-card)',
@@ -71,8 +58,9 @@ module.exports = {
 				'gradient-primary': 'var(--gradient-primary)',
 			},
 			fontFamily: {
-				sans: ['var(--font-geist-sans)', 'system-ui', 'sans-serif'],
-				mono: ['var(--font-geist-mono)', 'monospace'],
+				sans: ['var(--font-inter)', '-apple-system', 'sans-serif'],
+				display: ['var(--font-playfair)', 'Georgia', 'serif'],
+				mono: ['var(--font-space-mono)', 'var(--font-geist-mono)', 'monospace'],
 			},
 			backdropBlur: {
 				xs: '2px',
@@ -83,26 +71,19 @@ module.exports = {
 				sm: 'calc(var(--radius) - 4px)',
 			},
 			keyframes: {
-				fadeInUp: {
-					from: { opacity: '0', transform: 'translateY(16px)' },
-					to: { opacity: '1', transform: 'translateY(0)' },
-				},
-				fadeInDown: {
-					from: { opacity: '0', transform: 'translateY(-12px)' },
-					to: { opacity: '1', transform: 'translateY(0)' },
-				},
 				blink: {
 					'50%': { opacity: '0' },
 				},
+				marquee: {
+					'0%': { transform: 'translateX(0)' },
+					'100%': { transform: 'translateX(-50%)' },
+				},
 			},
 			animation: {
-				'fade-in-up': 'fadeInUp 0.7s ease-out both',
-				'fade-in-up-fast': 'fadeInUp 0.4s ease-out both',
-				'fade-in-up-slow': 'fadeInUp 0.8s ease-out both',
-				'fade-in-down': 'fadeInDown 0.6s ease-out both',
 				blink: 'blink 1s step-end infinite',
+				marquee: 'marquee 40s linear infinite',
 			},
 		},
 	},
-	plugins: [require('tailwindcss-animate')],
+	plugins: [],
 }

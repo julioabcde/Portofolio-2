@@ -1,191 +1,256 @@
 'use client'
 
-import { MapPin, GraduationCap, Code2, Languages } from 'lucide-react'
-import type { ComponentType, SVGProps } from 'react'
+import { useRef } from 'react'
+import {
+  motion,
+  useScroll,
+  useTransform,
+} from 'framer-motion'
 
-type IconComponent = ComponentType<SVGProps<SVGSVGElement>>
-
-interface InfoTile {
-  label: string
-  value: string
-  Icon: IconComponent
-}
-
-const INFO_TILES: readonly InfoTile[] = [
-  { label: 'Location', value: 'Jakarta, Indonesia', Icon: MapPin },
-  { label: 'University', value: 'BINUS University', Icon: GraduationCap },
-  { label: 'Focus', value: 'Frontend Development', Icon: Code2 },
-  { label: 'Languages', value: 'Indonesian, English', Icon: Languages },
-]
-
-const EXPERIENCES = [
+const STORY_BLOCKS = [
   {
-    period: '2024 — Present',
-    role: 'Frontend Developer',
-    company: 'Periksa.id',
-    type: 'Enrichment Program',
+    number: '01',
+    heading: 'Where It Started',
+    body: 'My interest in technology started early — taking machines apart, reading documentation I barely understood, building tiny things that did not quite work. The web was the first place where what I built could actually live somewhere, and that quiet thrill never left.',
   },
   {
-    period: '2021 — Present',
-    role: 'Computer Science',
-    company: 'BINUS University',
-    type: 'Undergraduate',
+    number: '02',
+    heading: 'Learning the Skills',
+    body: 'As my curiosity grew, I started shaping it deliberately. Typography, interaction design, motion, and the engineering beneath premium interfaces — I learned that craft is the slow distance between something that works and something that feels right.',
+  },
+  {
+    number: '03',
+    heading: 'My Experience',
+    body: 'My professional journey has included shipping production interfaces, collaborating with designers and product teams, and translating editorial ambition into code that performs. Each project is a study in restraint, precision, and pacing.',
   },
 ] as const
 
+const TIMELINE = [
+  {
+    period: '2022 — Present',
+    title: 'Binus University',
+    sub: 'Computer Science',
+  },
+  {
+    period: '2025 — 2026',
+    title: 'Front End Developer',
+    sub: 'Periksa Solusi Indonesia',
+  },
+] as const
+
+function StoryBlock({
+  number,
+  heading,
+  body,
+}: {
+  number: string
+  heading: string
+  body: string
+}) {
+  const ref = useRef<HTMLElement>(null)
+
+  // Memperlebar offset agar jarak scroll cukup panjang untuk menjalankan urutan animasi
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ['start 90%', 'center 40%'],
+  })
+
+  const PRE = 0.18
+  const POST = 1
+
+  // STEP 1: Number muncul paling awal (0% - 30% scroll progress)
+  const numberOpacity = useTransform(scrollYProgress, [0, 0.3], [PRE, POST])
+  const numberBlur = useTransform(scrollYProgress, [0, 0.3], ['blur(8px)', 'blur(0px)'])
+
+  // STEP 2 & 3: Heading reveal saat user scroll sedikit lagi (20% - 55% scroll progress)
+  // Mulai sedikit tumpang tindih dengan number agar flow-nya seamless
+  const headingOpacity = useTransform(scrollYProgress, [0.2, 0.55], [PRE, POST])
+  const headingY = useTransform(scrollYProgress, [0.2, 0.55], [15, 0])
+  const headingBlur = useTransform(scrollYProgress, [0.2, 0.55], ['blur(8px)', 'blur(0px)'])
+
+  // STEP 4 & 5: Paragraph fade in secara perlahan setelah heading (45% - 90% scroll progress)
+  const paragraphOpacity = useTransform(scrollYProgress, [0.45, 0.9], [PRE, POST])
+  const paragraphY = useTransform(scrollYProgress, [0.45, 0.9], [15, 0])
+  const paragraphBlur = useTransform(scrollYProgress, [0.45, 0.9], ['blur(8px)', 'blur(0px)'])
+
+  return (
+    <article ref={ref} className="relative py-8 sm:py-12">
+      <div className="grid grid-cols-[auto_1fr] items-start gap-x-8 sm:gap-x-12">
+        <motion.span
+          aria-hidden="true"
+          style={{ opacity: numberOpacity, filter: numberBlur }}
+          className="font-mono text-[2.75rem] sm:text-[3.5rem] leading-none tracking-tight text-foreground/25 select-none will-change-[opacity,filter]"
+        >
+          {number}
+        </motion.span>
+
+        <div>
+          <motion.h3
+            style={{ opacity: headingOpacity, y: headingY, filter: headingBlur }}
+            className="font-display text-[clamp(1.75rem,3.4vw,2.75rem)] font-semibold leading-[1.05] tracking-[-0.02em] text-foreground will-change-[opacity,transform,filter]"
+          >
+            {heading}
+          </motion.h3>
+          <motion.p
+            style={{ opacity: paragraphOpacity, y: paragraphY, filter: paragraphBlur }}
+            className="mt-5 max-w-[52ch] text-[0.98rem] sm:text-[1.02rem] leading-[1.75] text-muted will-change-[opacity,transform,filter]"
+          >
+            {body}
+          </motion.p>
+        </div>
+      </div>
+    </article>
+  )
+}
+
+function TimelineItem({
+  period,
+  title,
+  sub,
+}: {
+  period: string
+  title: string
+  sub: string
+}) {
+  const ref = useRef<HTMLLIElement>(null)
+
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ['start 85%', 'center center'],
+  })
+
+  const textOpacity = useTransform(scrollYProgress, [0, 1], [0.4, 1])
+  const dotScale = useTransform(scrollYProgress, [0, 1], [1, 1.35])
+  const dotGlow = useTransform(
+    scrollYProgress,
+    [0, 1],
+    ['0 0 0px 0px rgba(180,83,9,0)', '0 0 18px 2px rgba(180,83,9,0.45)']
+  )
+  const dotBg = useTransform(
+    scrollYProgress,
+    [0, 1],
+    ['rgba(168,162,158,0.6)', 'rgba(180,83,9,1)']
+  )
+
+  return (
+    <li ref={ref} className="relative pl-8 py-4">
+      <motion.span
+        aria-hidden="true"
+        style={{
+          scale: dotScale,
+          boxShadow: dotGlow,
+          backgroundColor: dotBg,
+        }}
+        className="absolute left-0 top-6 h-2 w-2 -translate-x-[3px] rounded-full will-change-transform"
+      />
+
+      <motion.div
+        style={{ opacity: textOpacity }}
+        className="will-change-[opacity]"
+      >
+        <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-subtle">
+          {period}
+        </p>
+        <h4 className="mt-2 font-display text-lg font-medium tracking-[-0.01em] text-foreground">
+          {title}
+        </h4>
+        <p className="mt-1 text-sm text-muted">{sub}</p>
+      </motion.div>
+    </li>
+  )
+}
+
 export default function About() {
+  const containerRef = useRef<HTMLDivElement>(null)
+
+  // Progress bar timeline tetap menggunakan parent ref agar garisnya turun seiring scroll section
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ['start center', 'end center'],
+  })
+
   return (
     <section
+      ref={containerRef}
       id="about"
-      className="relative py-section-y-sm md:py-section-y-md lg:py-section-y-lg overflow-hidden"
       aria-labelledby="about-heading"
+      className="relative overflow-clip bg-background text-foreground"
     >
-      <div className="container-page relative">
-
-        {/* Section header with large number */}
-        <header className="mb-rule-gap-sm md:mb-rule-gap flex items-end gap-6">
-          <span
-            aria-hidden="true"
-            className="text-[8rem] md:text-[10rem] font-bold leading-none text-border/50 select-none -mb-4"
-          >
-            03
-          </span>
-          <div className="pb-4">
-            <p className="text-sm font-mono text-primary uppercase tracking-widest mb-2">
-              About Me
-            </p>
+      <div className="relative z-10 flex flex-col py-20 lg:py-24">
+        <div className="container-page relative">
+          <header className="mb-rule-gap-sm md:mb-rule-gap">
+            <div className="mb-4 flex items-center gap-4">
+              <span aria-hidden="true" className="h-px w-7 bg-primary" />
+              <p className="text-[10px] font-mono uppercase tracking-[0.26em] text-primary">
+                About
+              </p>
+            </div>
             <h2
               id="about-heading"
-              className="text-4xl md:text-5xl font-bold leading-tight"
+              className="text-[clamp(2.5rem,5vw,4rem)] font-bold leading-[0.95] tracking-[-0.025em]"
             >
-              Who I Am
+              More Than
+              <br />
+              <em className="font-light italic text-muted">Credentials.</em>
             </h2>
-          </div>
-        </header>
-
-        {/**
-         * Bento grid layout — asymmetric tiles.
-         */}
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3 auto-rows-[100px]">
-
-          {/* Bio card — large tile with photo */}
-          <article
-            className="col-span-2 md:col-span-2 lg:col-span-3 row-span-3
-                       rounded-md border border-border bg-surface/40 backdrop-blur-sm
-                       p-6 md:p-8 flex flex-col"
-          >
-            <div className="flex items-start gap-5 mb-6">
-              <div
-                aria-hidden="true"
-                className="shrink-0 flex h-20 w-20 items-center justify-center
-                           rounded-md border border-border bg-primary text-white
-                           text-3xl font-bold tracking-tight"
-              >
-                J
-              </div>
-              <div>
-                <h3 className="text-xl font-bold">Julio</h3>
-                <p className="text-sm text-primary font-mono">Frontend Developer</p>
-                <p className="flex items-center gap-1.5 text-xs text-muted mt-1">
-                  <span className="relative flex h-1.5 w-1.5">
-                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-secondary opacity-75" />
-                    <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-secondary" />
-                  </span>
-                  Available for opportunities
-                </p>
-              </div>
-            </div>
-
-            <p className="text-muted leading-relaxed text-[15px] mb-4">
-              A Computer Science student at BINUS University with a passion for building
-              clean, accessible, and performant user interfaces. I care about the details
-              that make software feel polished.
-            </p>
-            <p className="text-muted leading-relaxed text-[15px]">
-              Currently working as a Frontend Developer at Periksa.id, building
-              healthcare technology for hospitals across Indonesia.
-            </p>
-
-            <figure className="mt-auto pt-6 border-t border-border/50">
-              <blockquote className="text-sm italic text-muted/70">
-                &ldquo;Every pixel matters, every interaction should feel intentional.&rdquo;
-              </blockquote>
-            </figure>
-          </article>
-
-          {/* Info tiles — small bento squares */}
-          {INFO_TILES.map(({ label, value, Icon }) => (
             <div
-              key={label}
-              className="col-span-1 row-span-1 rounded-md border border-border bg-surface/30
-                         backdrop-blur-sm p-4 flex flex-col justify-between
-                         transition-all duration-300 hover:border-primary/30 hover:bg-surface/50"
-            >
-              <Icon
-                aria-hidden="true"
-                className="h-5 w-5 text-primary/60"
-              />
-              <div>
-                <p className="text-[10px] font-mono text-muted/70 uppercase tracking-wider">
-                  {label}
-                </p>
-                <p className="text-sm font-medium text-foreground mt-0.5 leading-snug">
-                  {value}
-                </p>
-              </div>
-            </div>
-          ))}
+              aria-hidden="true"
+              className="mt-5 h-px bg-gradient-to-r from-primary via-border to-transparent"
+            />
+          </header>
+        </div>
 
-          {/* Stats tile — wide */}
-          <div
-            className="col-span-2 lg:col-span-2 row-span-1 rounded-md border border-border bg-surface/30
-                       backdrop-blur-sm p-4 flex items-center justify-around gap-4"
-          >
-            {[
-              { label: 'Projects', value: '10+' },
-              { label: 'Stack', value: '15+' },
-              { label: 'Coffee', value: '999+' },
-            ].map((stat) => (
-              <dl key={stat.label} className="text-center">
-                <dd className="text-2xl font-bold text-primary leading-none">{stat.value}</dd>
-                <dt className="text-[10px] font-mono text-muted/70 uppercase tracking-wider mt-1">
-                  {stat.label}
-                </dt>
-              </dl>
-            ))}
+        <div className="container-page grid grid-cols-1 gap-y-16 lg:grid-cols-12 lg:gap-x-16">
+          {/* LEFT — storytelling */}
+          <div className="lg:col-span-8">
+            <div className="space-y-4 lg:space-y-6">
+              {STORY_BLOCKS.map((b) => (
+                <StoryBlock
+                  key={b.number}
+                  number={b.number}
+                  heading={b.heading}
+                  body={b.body}
+                />
+              ))}
+            </div>
           </div>
 
-          {/* Experience strip */}
-          {EXPERIENCES.map((exp, i) => (
-            <article
-              key={i}
-              className="col-span-2 md:col-span-2 lg:col-span-3 row-span-1
-                         rounded-md border border-border bg-surface/30 backdrop-blur-sm
-                         p-4 flex items-center gap-4"
-            >
-              <div className="shrink-0 flex flex-col items-center gap-1">
-                <div className="h-2.5 w-2.5 rounded-full border-2 border-primary bg-background" />
-                {i < EXPERIENCES.length - 1 && (
-                  <div className="w-px h-4 bg-border" />
-                )}
-              </div>
+          {/* RIGHT — timeline */}
+          <aside className="lg:col-span-4 lg:self-start lg:sticky lg:top-32">
+            <div>
+              <p className="font-mono text-[10px] uppercase tracking-[0.32em] text-subtle">
+                Timeline
+              </p>
 
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2">
-                  <h4 className="text-sm font-semibold truncate">{exp.role}</h4>
-                  <span className="rounded-full border border-border px-2 py-0.5
-                                   text-[10px] font-mono text-muted shrink-0">
-                    {exp.type}
-                  </span>
-                </div>
-                <p className="text-xs text-muted mt-0.5">{exp.company}</p>
-              </div>
+              <div className="relative mt-8 pb-8">
+                {/* base line */}
+                <span
+                  aria-hidden="true"
+                  className="absolute left-0 top-0 h-full w-px bg-gradient-to-b from-transparent via-border to-transparent"
+                />
+                {/* progress glow */}
+                <motion.span
+                  aria-hidden="true"
+                  style={{
+                    scaleY: scrollYProgress,
+                    transformOrigin: 'top',
+                  }}
+                  className="absolute left-0 top-0 h-full w-px bg-gradient-to-b from-primary via-primary/40 to-transparent"
+                />
 
-              <time className="text-[10px] font-mono text-muted/70 uppercase tracking-wider shrink-0">
-                {exp.period}
-              </time>
-            </article>
-          ))}
+                <ul className="space-y-6">
+                  {TIMELINE.map((t) => (
+                    <TimelineItem
+                      key={t.title}
+                      period={t.period}
+                      title={t.title}
+                      sub={t.sub}
+                    />
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </aside>
         </div>
       </div>
     </section>
