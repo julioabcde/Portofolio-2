@@ -1,7 +1,3 @@
-'use client'
-
-import { useEffect, useRef, useState } from 'react'
-
 interface TechItem {
     name: string
     icon: string
@@ -26,109 +22,31 @@ const techStack: TechItem[] = [
 ]
 
 export default function TechStackMarquee() {
-    const trackARef = useRef<HTMLDivElement>(null)
-    const trackBRef = useRef<HTMLDivElement>(null)
-
-    const offsetRef = useRef(0)
-    const rafRef = useRef<number | null>(null)
-
-    const [paused, setPaused] = useState(false)
-
-    useEffect(() => {
-        const prefersReducedMotion = window.matchMedia(
-            '(prefers-reduced-motion: reduce)'
-        ).matches
-
-        if (prefersReducedMotion) return
-
-        const speed = 0.35
-
-        const animate = () => {
-            if (!paused && trackARef.current && trackBRef.current) {
-                const trackWidth = trackARef.current.offsetWidth
-
-                offsetRef.current -= speed
-
-                if (offsetRef.current <= -trackWidth) {
-                    offsetRef.current += trackWidth
-                }
-
-                trackARef.current.style.transform = `translateX(${offsetRef.current}px)`
-                trackBRef.current.style.transform = `translateX(${offsetRef.current + trackWidth}px)`
-            }
-
-            rafRef.current = requestAnimationFrame(animate)
-        }
-
-        rafRef.current = requestAnimationFrame(animate)
-
-        return () => {
-            if (rafRef.current) cancelAnimationFrame(rafRef.current)
-        }
-    }, [paused])
-
     return (
-        /**
-         * <section>
-         * - Decorative marquee
-         * - Hidden from assistive technology
-         */
-        <section
-            aria-hidden="true"
-            className="bg-background"
-        >
+        <section aria-hidden="true" className="bg-background">
             <div className="max-w-[500px]">
                 <div className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-4">
-                    {/* Label */}
                     <span className="text-xs font-medium uppercase tracking-[0.2em] text-muted">
                         Tech Stack
                     </span>
 
-                    {/* Marquee viewport */}
-                    <div
-                        className="relative h-16 overflow-hidden"
-                        onMouseEnter={() => setPaused(true)}
-                        onMouseLeave={() => setPaused(false)}
-                    >
-                        {/* Gradient masks */}
-                        <div className="pointer-events-none absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-background to-transparent z-10" />
-                        <div className="pointer-events-none absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-background to-transparent z-10" />
+                    <div className="group relative h-16 overflow-hidden">
+                        {/* Edge fades */}
+                        <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-24 bg-gradient-to-r from-background to-transparent" />
+                        <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-24 bg-gradient-to-l from-background to-transparent" />
 
-                        {/* Track A */}
-                        <div
-                            ref={trackARef}
-                            className="absolute left-0 top-0 flex h-full items-center"
-                        >
-                            <ul className="flex items-center gap-4 pr-10">
-                                {techStack.map((tech) => (
-                                    <li
-                                        key={tech.name}
-                                        className="opacity-70 transition-opacity hover:opacity-100"
-                                        title={tech.name}
-                                    >
-                                        <i className={`${tech.icon} text-4xl`} />
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-
-                        {/* Track B */}
-                        <div
-                            ref={trackBRef}
-                            className="absolute left-0 top-0 flex h-full items-center"
-                        >
-                            <ul className="flex items-center gap-4 pr-10">
-                                {techStack.map((tech) => (
-                                    <li
-                                        key={`${tech.name}-dup`}
-                                        className="opacity-70 transition-opacity hover:opacity-100"
-                                        title={tech.name}
-                                    >
-                                        <i className={`${tech.icon} text-4xl`} />
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
+                        {/* Track: items rendered twice; translates -50% to seamlessly loop */}
+                        <ul className="flex h-full w-max items-center gap-4 pr-4 animate-marquee group-hover:[animation-play-state:paused] motion-reduce:animate-none">
+                            {[...techStack, ...techStack].map((tech, i) => (
+                                <li
+                                    key={`${tech.name}-${i}`}
+                                    className="opacity-70 transition-opacity hover:opacity-100"
+                                    title={tech.name}
+                                >
+                                    <i className={`${tech.icon} text-4xl`} />
+                                </li>
+                            ))}
+                        </ul>
                     </div>
                 </div>
             </div>

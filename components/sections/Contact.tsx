@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, type FormEvent } from 'react'
-import { FlipEffect } from '../ui/FlipEffect'
+import { SlideEffect } from '../ui/SlideEffect'
 
 /**
  * Social / contact link data.
@@ -73,20 +73,29 @@ export default function Contact() {
 
           {/* LEFT COLUMN - Heading + info */}
           <div className="space-y-8">
+            {/* Section header — bold variant */}
             <header>
-              <p className="text-sm font-mono text-primary uppercase tracking-widest mb-3">
-                (Contact)
-              </p>
+              <div className="mb-4 flex items-center gap-4">
+                <span
+                  aria-hidden="true"
+                  className="h-px w-7 bg-primary"
+                />
+                <p className="text-[10px] font-mono uppercase tracking-[0.26em] text-primary">
+                  Contact
+                </p>
+              </div>
               <h2
                 id="contact-heading"
-                className="text-5xl md:text-6xl lg:text-7xl font-bold leading-[0.95] uppercase"
+                className="text-[clamp(2.5rem,5vw,4rem)] font-bold leading-[0.95] tracking-[-0.025em]"
               >
-                Let&rsquo;s
+                Let&rsquo;s Work
                 <br />
-                Work
-                <br />
-                <span className="text-muted">Together</span>
+                <em className="font-light italic text-muted">Together.</em>
               </h2>
+              <div
+                aria-hidden="true"
+                className="mt-5 h-px bg-gradient-to-r from-primary via-border to-transparent"
+              />
             </header>
 
             <p className="text-muted text-lg max-w-sm leading-relaxed">
@@ -106,16 +115,13 @@ export default function Contact() {
                   className="group flex h-11 w-11 items-center justify-center rounded-md
                              border border-border text-sm font-mono text-muted overflow-hidden"
                 >
-                  <FlipEffect
-                    fillOnHover
+                  <SlideEffect
                     fillColor="bg-primary/10"
                     fillTextColor="text-primary"
-                    direction="vertical"
                     duration={250}
-                    easing="ease-in-out"
                   >
                     {link.icon}
-                  </FlipEffect>
+                  </SlideEffect>
                 </a>
               ))}
             </nav>
@@ -137,16 +143,13 @@ export default function Contact() {
                     className="group mt-4 h-8 overflow-hidden text-sm font-mono text-primary
                                underline underline-offset-4"
                   >
-                    <FlipEffect
-                      fillOnHover
+                    <SlideEffect
                       fillColor="bg-transparent"
                       fillTextColor="text-foreground"
-                      direction="vertical"
                       duration={250}
-                      easing="ease-in-out"
                     >
                       Send another message
-                    </FlipEffect>
+                    </SlideEffect>
                   </button>
                 </div>
               ) : (
@@ -288,18 +291,15 @@ export default function Contact() {
                           Sending...
                         </span>
                       ) : (
-                        <FlipEffect
-                          fillOnHover
+                        <SlideEffect
                           fillColor="bg-primary"
                           fillTextColor="text-white"
-                          direction="vertical"
                           duration={300}
-                          easing="ease-in-out"
                         >
                           <span className="flex items-center gap-2">
                             SUBMIT <span>↗</span>
                           </span>
-                        </FlipEffect>
+                        </SlideEffect>
                       )}
                     </button>
                   </div>

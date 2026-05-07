@@ -24,21 +24,29 @@ export default function Skills() {
     >
       <div className="container-page">
 
+        {/* Section header — bold variant */}
         <header className="mb-rule-gap">
-          <div className="flex items-center gap-4 mb-6">
-            <p className="text-xs font-mono text-primary uppercase tracking-[0.2em] shrink-0">
-              Skills &amp; Expertise
+          <div className="mb-4 flex items-center gap-4">
+            <span
+              aria-hidden="true"
+              className="h-px w-7 bg-primary"
+            />
+            <p className="text-[10px] font-mono uppercase tracking-[0.26em] text-primary">
+              Skills
             </p>
-            <div aria-hidden="true" className="flex-1 h-px bg-border" />
           </div>
           <h2
             id="skills-heading"
-            className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight"
+            className="text-[clamp(2.5rem,5vw,4rem)] font-bold leading-[0.95] tracking-[-0.025em]"
           >
-            Technologies I use to
+            Technologies I
             <br />
-            <span className="text-muted">build great products.</span>
+            <em className="font-light italic text-muted">Use.</em>
           </h2>
+          <div
+            aria-hidden="true"
+            className="mt-5 h-px bg-gradient-to-r from-primary via-border to-transparent"
+          />
         </header>
 
         <dl className="divide-y divide-border border-y border-border">

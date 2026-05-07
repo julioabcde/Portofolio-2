@@ -10,37 +10,38 @@
 }
 
 :root {
-  /* Brand */
-  --color-primary: #000000;
-  --color-primary-light: #1b1b1b;
-  --color-accent: #000000;
+  /* Brand — warm amber accent */
+  --color-primary: #B45309;
+  --color-primary-light: #D97706;
+  --color-accent: #B45309;
 
   /* Secondary */
-  --color-secondary: #2e5bff;
-  --color-secondary-hover: #0040e0;
+  --color-secondary: #B45309;
+  --color-secondary-hover: #92400E;
 
-  /* Background layers */
-  --color-background: #fbf9f9;
-  --color-background-secondary: #f5f3f3;
-  --color-surface: #efeded;
+  /* Background layers — warm cream */
+  --color-background: #F5F2ED;
+  --color-background-secondary: #EFEAE2;
+  --color-surface: #FFFFFF;
 
-  /* Text */
-  --color-text: #1b1c1c;
-  --color-text-secondary: #4c4546;
+  /* Text — near-black on cream */
+  --color-text: #0A0908;
+  --color-text-secondary: #57534E;
+  --color-text-muted: #A8A29E;
 
   /* UI */
-  --color-border: #cfc4c5;
+  --color-border: #D6D3D1;
 
   /* Effects */
   --gradient-primary: linear-gradient(
     135deg,
-    #2e5bff 0%,
-    #0040e0 50%,
-    #001a8c 100%
+    #D97706 0%,
+    #B45309 50%,
+    #78350F 100%
   );
 
-  --shadow-glow: 0 0 30px rgba(46, 91, 255, 0.4);
-  --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.1);
+  --shadow-glow: 0 0 30px rgba(180, 83, 9, 0.25);
+  --shadow-card: 0 4px 20px rgba(10, 9, 8, 0.08);
 
   /* Radius */
   --radius: 4px;
