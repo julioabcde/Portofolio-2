@@ -5,6 +5,7 @@ import {
   motion,
   useScroll,
   useTransform,
+  MotionValue,
 } from 'framer-motion'
 
 const STORY_BLOCKS = [
@@ -36,55 +37,56 @@ const TIMELINE = [
     title: 'Front End Developer',
     sub: 'Periksa Solusi Indonesia',
   },
+  {
+    period: 'Future',
+    title: 'Coming Soon',
+    sub: 'Contact Me!',
+  },
 ] as const
 
 function StoryBlock({
   number,
   heading,
   body,
+  progress,
+  index,
+  total,
 }: {
   number: string
   heading: string
   body: string
+  progress: MotionValue<number>
+  index: number
+  total: number
 }) {
-  const ref = useRef<HTMLElement>(null)
+  const totalScrollRange = 0.85
+  const blockStart = (index / total) * totalScrollRange
+  const blockEnd = blockStart + (totalScrollRange / total)
+  const duration = blockEnd - blockStart
 
-  // Memperlebar offset agar jarak scroll cukup panjang untuk menjalankan urutan animasi
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ['start 90%', 'center 40%'],
-  })
+  const step1 = blockStart
+  const step2 = blockStart + duration * 0.33
+  const step3 = blockStart + duration * 0.66
+  const step4 = blockEnd
 
   const PRE = 0.18
   const POST = 1
 
-  // STEP 1: Number muncul paling awal (0% - 30% scroll progress)
-  const numberOpacity = useTransform(scrollYProgress, [0, 0.3], [PRE, POST])
-  const numberBlur = useTransform(scrollYProgress, [0, 0.3], ['blur(8px)', 'blur(0px)'])
+  const numberOpacity = useTransform(progress, [step1, step2], [PRE, POST])
+  const numberBlur = useTransform(progress, [step1, step2], ['blur(8px)', 'blur(0px)'])
 
-  // STEP 2 & 3: Heading reveal saat user scroll sedikit lagi (20% - 55% scroll progress)
-  // Mulai sedikit tumpang tindih dengan number agar flow-nya seamless
-  const headingOpacity = useTransform(scrollYProgress, [0.2, 0.55], [PRE, POST])
-  const headingY = useTransform(scrollYProgress, [0.2, 0.55], [15, 0])
-  const headingBlur = useTransform(scrollYProgress, [0.2, 0.55], ['blur(8px)', 'blur(0px)'])
+  const headingOpacity = useTransform(progress, [step2, step3], [PRE, POST])
+  const headingY = useTransform(progress, [step2, step3], [15, 0])
+  const headingBlur = useTransform(progress, [step2, step3], ['blur(8px)', 'blur(0px)'])
 
-  // STEP 4 & 5: Paragraph fade in secara perlahan setelah heading (45% - 90% scroll progress)
-  const paragraphOpacity = useTransform(scrollYProgress, [0.45, 0.9], [PRE, POST])
-  const paragraphY = useTransform(scrollYProgress, [0.45, 0.9], [15, 0])
-  const paragraphBlur = useTransform(scrollYProgress, [0.45, 0.9], ['blur(8px)', 'blur(0px)'])
+  const paragraphOpacity = useTransform(progress, [step3, step4], [PRE, POST])
+  const paragraphY = useTransform(progress, [step3, step4], [15, 0])
+  const paragraphBlur = useTransform(progress, [step3, step4], ['blur(8px)', 'blur(0px)'])
 
   return (
-    <article ref={ref} className="relative py-8 sm:py-12">
-      <div className="grid grid-cols-[auto_1fr] items-start gap-x-8 sm:gap-x-12">
-        <motion.span
-          aria-hidden="true"
-          style={{ opacity: numberOpacity, filter: numberBlur }}
-          className="font-mono text-[2.75rem] sm:text-[3.5rem] leading-none tracking-tight text-foreground/25 select-none will-change-[opacity,filter]"
-        >
-          {number}
-        </motion.span>
-
-        <div>
+    <article className="relative pb-8 sm:pb-12">
+      <div className="grid grid-cols-[1fr_auto] items-start gap-x-8 sm:gap-x-12">
+        <div className="text-right justify-self-end">
           <motion.h3
             style={{ opacity: headingOpacity, y: headingY, filter: headingBlur }}
             className="font-display text-[clamp(1.75rem,3.4vw,2.75rem)] font-semibold leading-[1.05] tracking-[-0.02em] text-foreground will-change-[opacity,transform,filter]"
@@ -93,11 +95,19 @@ function StoryBlock({
           </motion.h3>
           <motion.p
             style={{ opacity: paragraphOpacity, y: paragraphY, filter: paragraphBlur }}
-            className="mt-5 max-w-[52ch] text-[0.98rem] sm:text-[1.02rem] leading-[1.75] text-muted will-change-[opacity,transform,filter]"
+            className="mt-5 ml-auto max-w-[60ch] text-justify text-[0.98rem] sm:text-[1.02rem] leading-[1.75] text-muted-foreground will-change-[opacity,transform,filter]"
           >
             {body}
           </motion.p>
         </div>
+
+        <motion.span
+          aria-hidden="true"
+          style={{ opacity: numberOpacity, filter: numberBlur }}
+          className="font-mono text-[2.75rem] sm:text-[3.5rem] leading-none tracking-tight text-foreground/25 select-none will-change-[opacity,filter]"
+        >
+          {number}
+        </motion.span>
       </div>
     </article>
   )
@@ -107,54 +117,62 @@ function TimelineItem({
   period,
   title,
   sub,
+  progress,
+  index,
+  total,
+  isRight,
 }: {
   period: string
   title: string
   sub: string
+  progress: MotionValue<number>
+  index: number
+  total: number
+  isRight: boolean
 }) {
-  const ref = useRef<HTMLLIElement>(null)
+  const start = (index / total) * 0.8 + 0.05
+  const end = start + 0.1
 
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ['start 85%', 'center center'],
-  })
-
-  const textOpacity = useTransform(scrollYProgress, [0, 1], [0.4, 1])
-  const dotScale = useTransform(scrollYProgress, [0, 1], [1, 1.35])
+  const textOpacity = useTransform(progress, [start, end], [0.4, 1])
+  const dotScale = useTransform(progress, [start, end], [1, 1.35])
   const dotGlow = useTransform(
-    scrollYProgress,
-    [0, 1],
+    progress,
+    [start, end],
     ['0 0 0px 0px rgba(180,83,9,0)', '0 0 18px 2px rgba(180,83,9,0.45)']
   )
   const dotBg = useTransform(
-    scrollYProgress,
-    [0, 1],
+    progress,
+    [start, end],
     ['rgba(168,162,158,0.6)', 'rgba(180,83,9,1)']
   )
 
+  const textAlignment = isRight ? 'text-left' : 'text-right'
+  const textColumn = isRight ? 'col-start-3' : 'col-start-1'
+
   return (
-    <li ref={ref} className="relative pl-8 py-4">
+    <li className="relative grid grid-cols-[1fr_auto_1fr] items-start gap-x-6">
       <motion.span
         aria-hidden="true"
         style={{
           scale: dotScale,
           boxShadow: dotGlow,
           backgroundColor: dotBg,
+          x: isRight ? -4 : -4,
         }}
-        className="absolute left-0 top-6 h-2 w-2 -translate-x-[3px] rounded-full will-change-transform"
+        className="absolute left-1/2 top-0 h-2 w-2 -translate-x-1/2 rounded-full will-change-transform"
       />
 
       <motion.div
         style={{ opacity: textOpacity }}
-        className="will-change-[opacity]"
+        className={`will-change-[opacity] ${textColumn} ${textAlignment}`}
       >
-        <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-subtle">
+        <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-muted-foreground/60">
           {period}
         </p>
         <h4 className="mt-2 font-display text-lg font-medium tracking-[-0.01em] text-foreground">
           {title}
         </h4>
-        <p className="mt-1 text-sm text-muted">{sub}</p>
+        <p className="mt-1 text-sm text-muted-foreground">{sub}</p>
       </motion.div>
     </li>
   )
@@ -163,7 +181,6 @@ function TimelineItem({
 export default function About() {
   const containerRef = useRef<HTMLDivElement>(null)
 
-  // Progress bar timeline tetap menggunakan parent ref agar garisnya turun seiring scroll section
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ['start center', 'end center'],
@@ -177,9 +194,10 @@ export default function About() {
       className="relative overflow-clip bg-background text-foreground"
     >
       <div className="relative z-10 flex flex-col py-20 lg:py-24">
+        {/* HEADER KE KANAN */}
         <div className="container-page relative">
-          <header className="mb-rule-gap-sm md:mb-rule-gap">
-            <div className="mb-4 flex items-center gap-4">
+          <header className="mb-12 flex flex-col items-end text-right">
+            <div className="mb-4 flex items-center gap-4 flex-row-reverse">
               <span aria-hidden="true" className="h-px w-7 bg-primary" />
               <p className="text-[10px] font-mono uppercase tracking-[0.26em] text-primary">
                 About
@@ -191,42 +209,56 @@ export default function About() {
             >
               More Than
               <br />
-              <em className="font-light italic text-muted">Credentials.</em>
+              <em className="font-light italic text-muted-foreground">Credentials.</em>
             </h2>
             <div
               aria-hidden="true"
-              className="mt-5 h-px bg-gradient-to-r from-primary via-border to-transparent"
+              className="mt-5 h-px w-full bg-gradient-to-l from-primary via-border to-transparent"
             />
           </header>
         </div>
 
-        <div className="container-page grid grid-cols-1 gap-y-16 lg:grid-cols-12 lg:gap-x-16">
-          {/* LEFT — storytelling */}
-          <div className="lg:col-span-8">
+        <div className="container-page">
+          <figure className="mb-12 border-l border-border/60 pl-6 text-right">
+            <blockquote className="font-display text-[clamp(1.1rem,2vw,1.6rem)] italic text-foreground/80">
+              "Good interfaces are quiet. They carry intention, not noise."
+            </blockquote>
+            <figcaption className="mt-3 text-[10px] font-mono uppercase tracking-[0.28em] text-muted-foreground">
+              Design note
+            </figcaption>
+          </figure>
+        </div>
+
+        <div className="container-page grid grid-cols-1 gap-y-16 lg:grid-cols-[3fr_2fr] lg:gap-x-24">
+          {/* LEFT — STORYTELLING */}
+          <div className="lg:col-span-1 lg:order-first">
             <div className="space-y-4 lg:space-y-6">
-              {STORY_BLOCKS.map((b) => (
+              {STORY_BLOCKS.map((b, index) => (
                 <StoryBlock
                   key={b.number}
                   number={b.number}
                   heading={b.heading}
                   body={b.body}
+                  progress={scrollYProgress}
+                  index={index}
+                  total={STORY_BLOCKS.length}
                 />
               ))}
             </div>
           </div>
 
-          {/* RIGHT — timeline */}
-          <aside className="lg:col-span-4 lg:self-start lg:sticky lg:top-32">
+          {/* RIGHT — TIMELINE */}
+          <aside className="lg:col-span-1 lg:order-last lg:self-start lg:sticky lg:top-32">
             <div>
-              <p className="font-mono text-[10px] uppercase tracking-[0.32em] text-subtle">
+              <h3 className="text-center font-display text-[clamp(1.6rem,2.6vw,2.4rem)] font-semibold tracking-[-0.01em] text-foreground">
                 Timeline
-              </p>
+              </h3>
 
               <div className="relative mt-8 pb-8">
                 {/* base line */}
                 <span
                   aria-hidden="true"
-                  className="absolute left-0 top-0 h-full w-px bg-gradient-to-b from-transparent via-border to-transparent"
+                  className="absolute left-1/2 top-0 h-full w-px -translate-x-1/2 bg-gradient-to-b from-transparent via-border to-transparent"
                 />
                 {/* progress glow */}
                 <motion.span
@@ -235,16 +267,20 @@ export default function About() {
                     scaleY: scrollYProgress,
                     transformOrigin: 'top',
                   }}
-                  className="absolute left-0 top-0 h-full w-px bg-gradient-to-b from-primary via-primary/40 to-transparent"
+                  className="absolute left-1/2 top-0 h-full w-px -translate-x-1/2 bg-gradient-to-b from-primary via-primary/40 to-transparent"
                 />
 
-                <ul className="space-y-6">
-                  {TIMELINE.map((t) => (
+                <ul className="space-y-8">
+                  {TIMELINE.map((t, index) => (
                     <TimelineItem
                       key={t.title}
                       period={t.period}
                       title={t.title}
                       sub={t.sub}
+                      progress={scrollYProgress}
+                      index={index}
+                      total={TIMELINE.length}
+                      isRight={index % 2 === 0}
                     />
                   ))}
                 </ul>

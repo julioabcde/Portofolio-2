@@ -71,6 +71,7 @@ export default function Header() {
             )}
         >
             <div className={clsx(
+                'relative z-50',
                 'mx-auto w-full max-w-container',
                 'px-header-x-sm md:px-header-x-md lg:px-header-x-lg',
                 'flex items-center justify-between',
@@ -93,6 +94,7 @@ export default function Header() {
                 <MobileMenuTrigger
                     isOpen={mobileMenuOpen}
                     onToggle={toggleMobileMenu}
+                    className="ml-auto"
                 />
             </div>
 
@@ -113,6 +115,12 @@ interface MobilePanelProps {
     onLinkClick: () => void
 }
 
+const MOBILE_SOCIALS = [
+    { label: 'Instagram', href: 'https://instagram.com/' },
+    { label: 'LinkedIn', href: 'https://linkedin.com/in/julio' },
+    { label: 'GitHub', href: 'https://github.com/julio' },
+] as const
+
 function MobilePanel({ isOpen, links, activeId, onLinkClick }: MobilePanelProps) {
     const handleClick = useCallback(
         (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
@@ -127,45 +135,100 @@ function MobilePanel({ isOpen, links, activeId, onLinkClick }: MobilePanelProps)
         [onLinkClick]
     )
 
+    useEffect(() => {
+        if (!isOpen) return
+        const original = document.body.style.overflow
+        document.body.style.overflow = 'hidden'
+        return () => {
+            document.body.style.overflow = original
+        }
+    }, [isOpen])
+
     return (
         <div
             id="mobile-menu-panel"
             role="region"
             aria-label="Mobile navigation"
+            aria-hidden={!isOpen}
             className={clsx(
-                'md:hidden overflow-hidden transition-all duration-300 ease-in-out',
-                isOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0',
-                'border-b border-foreground/5 bg-background/95 backdrop-blur-sm'
+                'md:hidden fixed inset-0 z-40 bg-background',
+                'transition-opacity duration-300 ease-in-out',
+                isOpen
+                    ? 'opacity-100 pointer-events-auto'
+                    : 'opacity-0 pointer-events-none'
             )}
         >
-            <nav
-                aria-label="Mobile primary navigation"
-                className="mx-auto w-full max-w-container px-header-x-sm md:px-header-x-md lg:px-header-x-lg py-4"
-            >
-                <ul className="flex flex-col gap-1">
-                    {links.map((link) => {
-                        const isActive = link.id === activeId
-                        return (
-                            <li key={link.id}>
-                                <a
-                                    href={link.href}
-                                    onClick={(e) => handleClick(e, link.href)}
-                                    aria-current={isActive ? 'page' : undefined}
-                                    className={clsx(
-                                        'block py-3 text-sm font-bold tracking-[0.1em] uppercase',
-                                        'transition-colors duration-200',
-                                        isActive
-                                            ? 'text-secondary'
-                                            : 'text-foreground/60 hover:text-secondary'
-                                    )}
+            <div className="h-full overflow-y-auto flex flex-col px-header-x-sm pt-24 pb-10">
+                <nav
+                    aria-label="Mobile primary navigation"
+                    className="flex-1"
+                >
+                    <ul className="flex flex-col">
+                        {links.map((link, index) => {
+                            const isActive = link.id === activeId
+                            return (
+                                <li
+                                    key={link.id}
+                                    className="border-b border-border/40"
                                 >
-                                    {link.label}
-                                </a>
-                            </li>
-                        )
-                    })}
-                </ul>
-            </nav>
-        </div >
+                                    <a
+                                        href={link.href}
+                                        onClick={(e) => handleClick(e, link.href)}
+                                        aria-current={isActive ? 'page' : undefined}
+                                        className={clsx(
+                                            'flex items-baseline gap-5 py-5',
+                                            'transition-colors duration-200',
+                                            isActive
+                                                ? 'text-primary'
+                                                : 'text-foreground hover:text-primary'
+                                        )}
+                                    >
+                                        <span className="font-mono text-[10px] tracking-widest text-muted">
+                                            {String(index + 1).padStart(2, '0')}
+                                        </span>
+                                        <span className="font-display text-4xl font-semibold leading-none">
+                                            {link.label}
+                                        </span>
+                                    </a>
+                                </li>
+                            )
+                        })}
+                    </ul>
+                </nav>
+
+                <div className="mt-12 space-y-7 pt-8 border-t border-border/40">
+                    <div>
+                        <p className="text-[10px] font-mono uppercase tracking-[0.26em] text-muted mb-2">
+                            Get in touch
+                        </p>
+                        <a
+                            href="mailto:media.julio68@gmail.com"
+                            className="text-base font-medium text-foreground hover:text-primary transition-colors break-all"
+                        >
+                            media.julio68@gmail.com
+                        </a>
+                    </div>
+                    <div>
+                        <p className="text-[10px] font-mono uppercase tracking-[0.26em] text-muted mb-3">
+                            Socials
+                        </p>
+                        <ul className="flex flex-col gap-2">
+                            {MOBILE_SOCIALS.map((social) => (
+                                <li key={social.label}>
+                                    <a
+                                        href={social.href}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="text-sm text-foreground hover:text-primary transition-colors"
+                                    >
+                                        {social.label}
+                                    </a>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
     )
 }
