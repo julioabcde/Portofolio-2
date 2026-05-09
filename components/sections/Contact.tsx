@@ -63,11 +63,6 @@ export default function Contact() {
       className="relative py-section-y-sm md:py-section-y-md lg:py-section-y-lg overflow-hidden"
       aria-labelledby="contact-heading"
     >
-      {/* Top border accent */}
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 h-px w-3/4 bg-gradient-to-r from-transparent via-border to-transparent" />
-      </div>
-
       <div className="container-page relative">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
 

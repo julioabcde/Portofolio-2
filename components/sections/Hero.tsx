@@ -7,36 +7,65 @@ export default function Hero() {
     <section
       id="home"
       aria-label="Introduction"
-      className="relative min-h-screen flex flex-col justify-center overflow-hidden pt-14"
+      className="relative min-h-screen flex flex-col justify-center overflow-hidden md:pt-14"
     >
-      {/* Axis labels */}
-      <span
-        aria-hidden="true"
-        className="hidden md:flex absolute left-8 top-0 bottom-0 items-center font-mono text-[0.6rem] font-bold tracking-[0.35em] uppercase text-subtle [writing-mode:vertical-rl] z-10 pointer-events-none"
-      >
-        Portfolio 2026 — Independent Practice
-      </span>
-      <span
-        aria-hidden="true"
-        className="hidden md:flex absolute right-8 top-0 bottom-0 items-center font-mono text-[0.6rem] font-bold tracking-[0.35em] uppercase text-subtle [writing-mode:vertical-rl] rotate-180 z-10 pointer-events-none"
-      >
-        Frontend Development & Visual Systems
-      </span>
-
-      {/* Main container */}
-      <div className="container-page relative">
-        {/* Portrait — clipped to container width */}
-        <div
-          aria-hidden="true"
-          className="absolute inset-0 overflow-hidden pointer-events-none z-0"
+      <div className="md:hidden flex flex-1 flex-col px-6 pt-24 relative z-[1]">
+        <nav
+          aria-label="Mobile socials"
+          className="flex justify-center gap-7 mb-8"
         >
-          <div className="absolute right-0 top-0 h-full aspect-[2/3]">
+          {[
+            { label: 'Instagram', href: 'https://instagram.com/' },
+            { label: 'LinkedIn', href: 'https://linkedin.com/in/julio' },
+            { label: 'GitHub', href: 'https://github.com/julio' },
+          ].map((s) => (
+            <a
+              key={s.label}
+              href={s.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-mono text-[10px] font-bold tracking-[0.2em] uppercase text-foreground hover:text-primary transition-colors"
+            >
+              {s.label}
+            </a>
+          ))}
+        </nav>
+
+        <div className="relative flex-1 flex items-end justify-center">
+          <div className="absolute bottom-0 h-full aspect-[2/3]">
             <Image
               src="/julio_hero.png"
               alt=""
               fill
               priority
-              sizes="(max-width: 768px) 60vw, 40vw"
+              sizes="85vw"
+              className="object-cover object-top select-none"
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* Axis label */}
+      <span
+        aria-hidden="true"
+        className="hidden md:flex absolute right-8 top-0 bottom-4 items-center font-mono text-[0.6rem] font-bold tracking-[0.35em] uppercase text-subtle [writing-mode:vertical-rl] rotate-180 z-10 pointer-events-none"
+      >
+        Frontend Development & Visual Systems
+      </span>
+
+      {/* Main container — desktop only */}
+      <div className="hidden md:block container-page relative pt-12 md:pt-14 lg:pt-16 xl:pt-20">
+        {/* Portrait — clipped to container width */}
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 overflow-hidden pointer-events-none z-0"
+        >
+          <div className="absolute right-0 md:right-16 lg:right-18 top-0 h-full aspect-[2/3]">
+            <Image
+              src="/julio_hero.png"
+              alt=""
+              fill
+              priority
               className="object-contain object-top select-none"
             />
 
@@ -52,12 +81,8 @@ export default function Hero() {
           </div>
         </div>
 
-        <div className="relative z-[2] font-mono text-[0.65rem] font-bold tracking-[0.3em] uppercase text-primary mb-12">
-          Frontend Developer & UI Engineer
-        </div>
-
         <h1
-          className="relative z-[2] font-display font-extrabold leading-[0.9] tracking-[-0.04em] mb-12 max-w-[1100px]"
+          className="relative z-[2] font-display font-extrabold leading-[0.9] tracking-[-0.04em] mb-6 md:mb-8 lg:mb-10 xl:mb-14 2xl:mb-18 max-w-[1100px] xl:max-w-[1200px] 2xl:max-w-[1400px]"
           style={{ fontSize: 'clamp(3rem, 12vw, 12rem)' }}
         >
           Code that<br />
