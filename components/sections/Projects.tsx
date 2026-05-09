@@ -58,14 +58,6 @@ export default function Projects() {
       style={{ height: `${total * 100}vh` }}
     >
       <div className="sticky top-0 flex h-screen flex-col overflow-hidden">
-        {/* Section divider line */}
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-x-0 top-0"
-        >
-          <div className="absolute top-0 left-1/2 h-px w-3/4 -translate-x-1/2 bg-gradient-to-r from-transparent via-border to-transparent" />
-        </div>
-
         {/* Header — bold variant */}
         <header className="container-page relative z-10 pt-12 md:pt-16">
           <div className="mb-4 flex items-center gap-4">
