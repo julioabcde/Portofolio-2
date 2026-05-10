@@ -1,15 +1,16 @@
 'use client'
 
-import { useState, useEffect, useCallback, useRef } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { clsx } from 'clsx'
 import { useActiveSection } from '@/lib/hooks/useActiveSection'
 import { NAV_LINKS } from '@/lib/data/navigation'
+import { smoothScrollToHash } from '@/lib/utils/smoothScrollToHash'
+import { useLenis } from '@/components/providers/LenisProvider'
 import NavLinks from './NavLinks'
 import MobileMenuTrigger from './MobileMenuTrigger'
 
 export default function Header() {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-    const headerRef = useRef<HTMLElement>(null)
 
     const activeId = useActiveSection({
         sectionIds: NAV_LINKS.map((link) => link.id),
@@ -40,19 +41,6 @@ export default function Header() {
     useEffect(() => {
         if (!mobileMenuOpen) return
 
-        const handleClickOutside = (e: MouseEvent) => {
-            if (headerRef.current && !headerRef.current.contains(e.target as Node)) {
-                closeMobileMenu()
-            }
-        }
-
-        document.addEventListener('mousedown', handleClickOutside)
-        return () => document.removeEventListener('mousedown', handleClickOutside)
-    }, [mobileMenuOpen, closeMobileMenu])
-
-    useEffect(() => {
-        if (!mobileMenuOpen) return
-
         const handleEscape = (e: KeyboardEvent) => {
             if (e.key === 'Escape') closeMobileMenu()
         }
@@ -62,41 +50,42 @@ export default function Header() {
     }, [mobileMenuOpen, closeMobileMenu])
 
     return (
-        <header
-            ref={headerRef}
-            className={clsx(
-                'fixed top-0 left-0 right-0 z-50',
-                'bg-background/90 backdrop-blur-sm',
-                'border-b border-foreground/5'
-            )}
-        >
-            <div className={clsx(
-                'relative z-50',
-                'mx-auto w-full max-w-container',
-                'px-header-x-sm md:px-header-x-md lg:px-header-x-lg',
-                'flex items-center justify-between',
-                'h-20'
-            )}>
-                <a
-                    href="#home"
-                    aria-label="Go to top"
-                    className="text-xl font-black tracking-tighter text-foreground hover:text-secondary transition-colors"
-                >
-                    PORTFOLIO.
-                </a>
+        <>
+            <header
+                className={clsx(
+                    'fixed top-0 left-0 right-0 z-50',
+                    'bg-background/90 backdrop-blur-sm',
+                    'border-b border-foreground/5'
+                )}
+            >
+                <div className={clsx(
+                    'relative z-50',
+                    'mx-auto w-full max-w-container',
+                    'px-header-x-sm md:px-header-x-md lg:px-header-x-lg',
+                    'flex items-center justify-between',
+                    'h-20'
+                )}>
+                    <a
+                        href="#home"
+                        aria-label="Go to top"
+                        className="text-xl font-black tracking-tighter text-foreground hover:text-secondary transition-colors"
+                    >
+                        PORTFOLIO.
+                    </a>
 
-                <NavLinks
-                    links={NAV_LINKS}
-                    activeId={activeId}
-                    className="hidden md:flex"
-                />
+                    <NavLinks
+                        links={NAV_LINKS}
+                        activeId={activeId}
+                        className="hidden md:flex"
+                    />
 
-                <MobileMenuTrigger
-                    isOpen={mobileMenuOpen}
-                    onToggle={toggleMobileMenu}
-                    className="ml-auto"
-                />
-            </div>
+                    <MobileMenuTrigger
+                        isOpen={mobileMenuOpen}
+                        onToggle={toggleMobileMenu}
+                        className="ml-auto"
+                    />
+                </div>
+            </header>
 
             <MobilePanel
                 isOpen={mobileMenuOpen}
@@ -104,7 +93,7 @@ export default function Header() {
                 activeId={activeId}
                 onLinkClick={closeMobileMenu}
             />
-        </header>
+        </>
     )
 }
 
@@ -122,17 +111,16 @@ const MOBILE_SOCIALS = [
 ] as const
 
 function MobilePanel({ isOpen, links, activeId, onLinkClick }: MobilePanelProps) {
+    const lenis = useLenis()
+
     const handleClick = useCallback(
         (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
             e.preventDefault()
-            const target = document.getElementById(href.slice(1))
-            if (target) {
-                target.scrollIntoView({ behavior: 'smooth', block: 'start' })
-                history.pushState(null, '', href)
+            if (smoothScrollToHash(href, lenis)) {
                 onLinkClick()
             }
         },
-        [onLinkClick]
+        [lenis, onLinkClick]
     )
 
     useEffect(() => {

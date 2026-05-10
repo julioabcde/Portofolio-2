@@ -29,8 +29,8 @@ module.exports = {
 
 			spacing: {
 				'section-y-sm': '64px',
-				'section-y-md': '96px',
-				'section-y-lg': '120px',
+				'section-y-md': '80px',
+				'section-y-lg': '96px',
 
 				'margin-x-sm': '24px',
 				'margin-x-md': '40px',
