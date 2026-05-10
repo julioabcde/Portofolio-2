@@ -1,7 +1,9 @@
 'use client'
 
-import { useCallback, KeyboardEvent } from 'react'
+import { useCallback } from 'react'
 import { clsx } from 'clsx'
+import { smoothScrollToHash } from '@/lib/utils/smoothScrollToHash'
+import { useLenis } from '@/components/providers/LenisProvider'
 
 export interface NavLink {
     id: string
@@ -16,26 +18,20 @@ interface NavLinksProps {
 }
 
 export default function NavLinks({ links, activeId, className }: NavLinksProps) {
+    const lenis = useLenis()
+
     const handleClick = useCallback(
         (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
             if (!href.startsWith('#')) return
 
             e.preventDefault()
 
-            const targetId = href.slice(1) 
-            const target = document.getElementById(targetId)
-
-            if (!target) {
-                if (process.env.NODE_ENV === 'development') {
-                    console.warn(`[NavLinks] Target #${targetId} not found in DOM`)
-                }
-                return
+            const ok = smoothScrollToHash(href, lenis)
+            if (!ok && process.env.NODE_ENV === 'development') {
+                console.warn(`[NavLinks] Target ${href} not found in DOM`)
             }
-            target.scrollIntoView({ behavior: 'smooth', block: 'start' })
-
-            history.pushState(null, '', href)
         },
-        []
+        [lenis]
     )
 
     return (
