@@ -193,7 +193,7 @@ export default function About() {
       aria-labelledby="about-heading"
       className="relative overflow-clip bg-background text-foreground"
     >
-      <div className="relative z-10 flex flex-col py-20 lg:py-24">
+      <div className="relative z-10 flex flex-col py-section-y-sm md:py-section-y-md lg:py-section-y-md">
         {/* HEADER KE KANAN */}
         <div className="container-page relative">
           <header className="mb-12 flex flex-col items-end text-right">

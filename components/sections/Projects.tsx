@@ -2,6 +2,7 @@
 
 import { useRef, useState } from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
 import {
   motion,
   useScroll,
@@ -11,7 +12,7 @@ import {
   useMotionValueEvent,
   type MotionValue,
 } from 'framer-motion'
-import { ArrowUpRight, ImageOff } from 'lucide-react'
+import { ArrowRight, ArrowUpRight, ImageOff } from 'lucide-react'
 import { PROJECTS } from '@/lib/data/project'
 import type { Project } from '@/types/project'
 
@@ -26,14 +27,17 @@ const CARD_VW = 70
 const SIDE_PAD_VW = (100 - CARD_VW) / 2
 const GAP_VW = 4
 
+const FEATURED_PROJECTS = PROJECTS.slice(0, 3)
+
 export default function Projects() {
   const sectionRef = useRef<HTMLElement>(null)
+  const stickyRangeRef = useRef<HTMLDivElement>(null)
   const reduceMotion = useReducedMotion()
-  const total = PROJECTS.length
+  const total = FEATURED_PROJECTS.length + 1
   const segments = Math.max(total - 1, 1)
 
   const { scrollYProgress } = useScroll({
-    target: sectionRef,
+    target: stickyRangeRef,
     offset: ['start start', 'end end'],
   })
 
@@ -53,62 +57,76 @@ export default function Projects() {
     <section
       ref={sectionRef}
       id="projects"
-      aria-labelledby="projects-heading"
+      aria-label="Selected Works"
       className="relative bg-background text-foreground"
-      style={{ height: `${total * 100}vh` }}
     >
-      <div className="sticky top-0 flex h-screen flex-col overflow-hidden">
-        {/* Header — bold variant */}
-        <header className="container-page relative z-10 pt-12 md:pt-16">
-          <div className="mb-4 flex items-center gap-4">
-            <span
-              aria-hidden="true"
-              className="h-px w-7 bg-primary"
-            />
-            <p className="text-[10px] font-mono uppercase tracking-[0.26em] text-primary">
-              Projects
-            </p>
-          </div>
-          <h2
-            id="projects-heading"
-            className="text-[clamp(2.5rem,5vw,4rem)] font-bold leading-[0.95] tracking-[-0.025em]"
-          >
-            Selected
-            <br />
-            <em className="font-light italic text-muted">Works.</em>
-          </h2>
-          <div
-            aria-hidden="true"
-            className="mt-5 h-px bg-gradient-to-r from-primary via-border to-transparent"
-          />
-        </header>
+      {/* Desktop: heading sits above the sticky range */}
+      <SectionHeader className="hidden md:block" />
 
-        {/* Horizontal showcase */}
-        <div className="relative z-10 flex flex-1 items-center">
-          <motion.div
-            className="flex h-full items-center will-change-transform"
-            style={{ x }}
-          >
-            {PROJECTS.map((project, i) => (
-              <ProjectShowcase
-                key={project.id}
-                project={project}
-                index={i}
+      <div
+        ref={stickyRangeRef}
+        className="relative md:-mt-8"
+        style={{ height: `${total * 100}vh` }}
+      >
+        {/* Horizontal showcase (sticky only here) */}
+        <div className="sticky top-0 z-10 flex h-screen overflow-hidden">
+          <div className="relative flex h-full w-full flex-col md:flex-row md:items-start overflow-hidden">
+            {/* Mobile: heading sits inside the same flex container as the cards */}
+            <SectionHeader className="md:hidden shrink-0" />
+
+            <motion.div
+              className="flex flex-1 items-center md:h-full md:flex-none md:items-center will-change-transform"
+              style={{ x }}
+            >
+              {FEATURED_PROJECTS.map((project, i) => (
+                <ProjectShowcase
+                  key={project.id}
+                  project={project}
+                  index={i}
+                  count={total}
+                  progress={driver}
+                />
+              ))}
+              <ViewAllShowcase
+                index={FEATURED_PROJECTS.length}
                 count={total}
                 progress={driver}
               />
-            ))}
-          </motion.div>
-        </div>
+            </motion.div>
+          </div>
 
-        {/* Scroll progress indicator */}
-        <ScrollIndicator
-          progress={driver}
-          progressBarWidth={progressBarWidth}
-          total={total}
-        />
+          <div className="pointer-events-none absolute inset-x-0 bottom-0">
+            <ScrollIndicator
+              progress={driver}
+              progressBarWidth={progressBarWidth}
+              total={total}
+            />
+          </div>
+        </div>
       </div>
     </section>
+  )
+}
+
+function SectionHeader({ className }: { className?: string }) {
+  return (
+    <header className={`container-page relative z-10 pt-24 md:pt-12 ${className ?? ''}`}>
+      <div className="mb-4 flex items-center gap-4">
+        <span aria-hidden="true" className="h-px w-7 bg-primary" />
+        <p className="text-[10px] font-mono uppercase tracking-[0.26em] text-primary">
+          Projects
+        </p>
+      </div>
+      <h2 className="text-[clamp(2.5rem,5vw,4rem)] font-bold leading-[0.95] tracking-[-0.025em]">
+        Selected
+        <br />
+        <em className="font-light italic text-muted">Works.</em>
+      </h2>
+      <div
+        aria-hidden="true"
+        className="mt-5 h-px bg-gradient-to-r from-primary via-border to-transparent"
+      />
+    </header>
   )
 }
 
@@ -237,6 +255,84 @@ function ProjectShowcase({ project, index, count, progress }: ShowcaseProps) {
           </div>
         </div>
       </div>
+    </motion.article>
+  )
+}
+
+interface ViewAllShowcaseProps {
+  index: number
+  count: number
+  progress: MotionValue<number>
+}
+
+function ViewAllShowcase({ index, count, progress }: ViewAllShowcaseProps) {
+  const segments = Math.max(count - 1, 1)
+  const center = index / segments
+
+  const activeness = useTransform(progress, p => {
+    const distance = Math.abs(p - center) * segments
+    return Math.max(0, 1 - Math.min(distance, 1))
+  })
+
+  const scale = useTransform(activeness, [0, 1], [0.86, 1])
+  const opacity = useTransform(activeness, [0, 1], [0.28, 1])
+  const blurPx = useTransform(activeness, [0, 1], [8, 0])
+  const filter = useTransform(blurPx, b => `blur(${b}px)`)
+  const yShift = useTransform(activeness, [0, 1], [18, 0])
+  const titleX = useTransform(activeness, [0, 1], [32, 0])
+
+  const isLast = index === count - 1
+
+  return (
+    <motion.article
+      className="relative shrink-0"
+      style={{
+        width: `${CARD_VW}vw`,
+        marginLeft: `${GAP_VW / 2}vw`,
+        marginRight: isLast ? `${SIDE_PAD_VW}vw` : `${GAP_VW / 2}vw`,
+        scale,
+        opacity,
+        filter,
+        y: yShift,
+      }}
+    >
+      <Link
+        href="/projects"
+        aria-label="View all projects"
+        className="group block h-[60vh] overflow-hidden rounded-2xl border border-border bg-surface/60 shadow-card backdrop-blur-sm transition-colors hover:border-primary/60"
+      >
+        <div className="flex h-full flex-col justify-between gap-6 p-6 md:p-8 lg:p-10">
+          <div className="flex items-start justify-between text-[11px] font-mono uppercase tracking-[0.22em] text-muted">
+            <span>{String(index + 1).padStart(2, '0')}</span>
+            <span className="text-right">Archive · Gallery</span>
+          </div>
+
+          <motion.div style={{ x: titleX }} className="flex-1 flex flex-col justify-center">
+            <p className="text-[10px] font-mono uppercase tracking-[0.26em] text-primary mb-4">
+              Browse the archive
+            </p>
+            <h3 className="text-3xl md:text-4xl lg:text-5xl font-semibold leading-[1.05] tracking-tight">
+              View All
+              <br />
+              <em className="font-light italic text-muted">Projects.</em>
+            </h3>
+            <p className="mt-5 max-w-md text-sm md:text-base text-muted leading-relaxed">
+              Explore the complete gallery — case studies, experiments, and
+              client work, all in one place.
+            </p>
+          </motion.div>
+
+          <div className="flex items-center justify-between">
+            <span className="inline-flex items-center gap-3 border-b border-foreground/40 pb-1 text-xs font-mono uppercase tracking-[0.22em] text-foreground transition-colors group-hover:border-foreground">
+              Open gallery
+              <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" />
+            </span>
+            <span className="font-mono text-[11px] uppercase tracking-[0.22em] text-muted">
+              {PROJECTS.length}+ works
+            </span>
+          </div>
+        </div>
+      </Link>
     </motion.article>
   )
 }
