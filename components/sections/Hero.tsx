@@ -1,6 +1,8 @@
 import Image from 'next/image'
-import TechStackMarquee from '../ui/TechStackMarquee'
+import Link from 'next/link'
+import { ArrowUpRight } from 'lucide-react'
 import { TypingEffect } from '../ui/TypingEffect'
+import { SlideEffect } from '../ui/SlideEffect'
 
 export default function Hero() {
   return (
@@ -12,12 +14,12 @@ export default function Hero() {
       <div className="md:hidden flex flex-1 flex-col px-6 pt-24 relative z-[1]">
         <nav
           aria-label="Mobile socials"
-          className="flex justify-center gap-7 mb-8"
+          className="flex justify-center gap-7 mb-5"
         >
           {[
-            { label: 'Instagram', href: 'https://instagram.com/' },
-            { label: 'LinkedIn', href: 'https://linkedin.com/in/julio' },
-            { label: 'GitHub', href: 'https://github.com/julio' },
+            { label: 'Instagram', href: 'https://instagram.com/julio68_' },
+            { label: 'LinkedIn', href: 'https://www.linkedin.com/in/julio68' },
+            { label: 'GitHub', href: 'http://github.com/julioabcde' },
           ].map((s) => (
             <a
               key={s.label}
@@ -30,6 +32,16 @@ export default function Hero() {
             </a>
           ))}
         </nav>
+
+        <a
+          href="https://drive.google.com/file/d/1U6K3ozL6bgnphPxq88YSuw2T5OQShL6S/view?usp=sharing"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mb-8 inline-flex items-center gap-2 self-center rounded-lg border border-foreground px-5 py-2.5 font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-foreground transition-colors hover:bg-foreground hover:text-background"
+        >
+          View CV
+          <ArrowUpRight className="h-3 w-3" />
+        </a>
 
         <div className="relative flex-1 flex items-end justify-center">
           <div className="absolute bottom-0 h-full aspect-[2/3]">
@@ -90,8 +102,40 @@ export default function Hero() {
           it's read.
         </h1>
 
-        <div>
-          <TechStackMarquee></TechStackMarquee>
+        <div className="relative z-[2] flex flex-wrap items-center gap-4">
+          <Link
+            href="/#contact"
+            className="group relative inline-flex h-12 items-center justify-center overflow-hidden rounded-lg border border-primary px-6 text-sm font-medium text-primary"
+          >
+            <SlideEffect
+              fillColor="bg-primary"
+              fillTextColor="text-white"
+              duration={300}
+            >
+              <span className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.22em]">
+                Contact me
+                <ArrowUpRight className="h-3.5 w-3.5" />
+              </span>
+            </SlideEffect>
+          </Link>
+
+          <a
+            href="https://drive.google.com/file/d/1U6K3ozL6bgnphPxq88YSuw2T5OQShL6S/view?usp=sharing"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group relative inline-flex h-12 items-center justify-center overflow-hidden rounded-lg border border-foreground px-6 text-sm font-medium text-foreground"
+          >
+            <SlideEffect
+              fillColor="bg-foreground"
+              fillTextColor="text-background"
+              duration={300}
+            >
+              <span className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.22em]">
+                View CV
+                <ArrowUpRight className="h-3.5 w-3.5" />
+              </span>
+            </SlideEffect>
+          </a>
         </div>
       </div>
 

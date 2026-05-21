@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { clsx } from 'clsx'
+import { ArrowUpRight } from 'lucide-react'
 import { useActiveSection } from '@/lib/hooks/useActiveSection'
 import { NAV_LINKS } from '@/lib/data/navigation'
 import { smoothScrollToHash } from '@/lib/utils/smoothScrollToHash'
@@ -106,8 +107,8 @@ interface MobilePanelProps {
 
 const MOBILE_SOCIALS = [
     { label: 'Instagram', href: 'https://instagram.com/' },
-    { label: 'LinkedIn', href: 'https://linkedin.com/in/julio' },
-    { label: 'GitHub', href: 'https://github.com/julio' },
+    { label: 'LinkedIn', href: 'https://www.linkedin.com/in/julio68' },
+    { label: 'GitHub', href: 'http://github.com/julioabcde' },
 ] as const
 
 function MobilePanel({ isOpen, links, activeId, onLinkClick }: MobilePanelProps) {
@@ -194,6 +195,20 @@ function MobilePanel({ isOpen, links, activeId, onLinkClick }: MobilePanelProps)
                             className="text-base font-medium text-foreground hover:text-primary transition-colors break-all"
                         >
                             media.julio68@gmail.com
+                        </a>
+                    </div>
+                    <div>
+                        <p className="text-[10px] font-mono uppercase tracking-[0.26em] text-muted mb-2">
+                            Resume
+                        </p>
+                        <a
+                            href="https://drive.google.com/file/d/1U6K3ozL6bgnphPxq88YSuw2T5OQShL6S/view?usp=sharing"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-2 text-base font-medium text-foreground hover:text-primary transition-colors"
+                        >
+                            View CV
+                            <ArrowUpRight className="h-4 w-4" />
                         </a>
                     </div>
                     <div>
