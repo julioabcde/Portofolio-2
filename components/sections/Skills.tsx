@@ -111,7 +111,7 @@ export default function Skills() {
             >
               A stack that
               <br />
-              <em className="font-display font-light italic text-primary">
+              <em className="font-display font-light italic text-muted-foreground">
                 keeps moving.
               </em>
             </h2>

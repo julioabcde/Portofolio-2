@@ -13,19 +13,14 @@ import {
   type MotionValue,
 } from 'framer-motion'
 import { ArrowRight, ArrowUpRight, ImageOff } from 'lucide-react'
-import { PROJECTS } from '@/lib/data/project'
 import type { Project } from '@/types/project'
-
-const CATEGORIES: Record<string, string> = {
-  velocart: 'Point of Sales · Web App',
-  portfolio: 'Personal Branding · Web',
-  periksa: 'Healthcare · Dashboard',
-  'project-4': 'Web Application',
-}
-
-const CARD_VW = 70
-const SIDE_PAD_VW = (100 - CARD_VW) / 2
-const GAP_VW = 4
+import {
+  PROJECTS,
+  CARD_VW,
+  GAP_VW,
+  SIDE_PAD_VW,
+  CATEGORIES,
+} from '@/lib/data/project'
 
 const FEATURED_PROJECTS = PROJECTS.slice(0, 3)
 
@@ -60,7 +55,6 @@ export default function Projects() {
       aria-label="Selected Works"
       className="relative bg-background text-foreground"
     >
-      {/* Desktop: heading sits above the sticky range */}
       <SectionHeader className="hidden md:block" />
 
       <div
@@ -68,10 +62,8 @@ export default function Projects() {
         className="relative md:-mt-8"
         style={{ height: `${total * 100}vh` }}
       >
-        {/* Horizontal showcase (sticky only here) */}
         <div className="sticky top-0 z-10 flex h-screen overflow-hidden">
           <div className="relative flex h-full w-full flex-col md:flex-row md:items-start overflow-hidden">
-            {/* Mobile: heading sits inside the same flex container as the cards */}
             <SectionHeader className="md:hidden shrink-0" />
 
             <motion.div
@@ -79,7 +71,7 @@ export default function Projects() {
               style={{ x }}
             >
               {FEATURED_PROJECTS.map((project, i) => (
-                <ProjectShowcase
+                <ViewDetailProjects
                   key={project.id}
                   project={project}
                   index={i}
@@ -87,7 +79,7 @@ export default function Projects() {
                   progress={driver}
                 />
               ))}
-              <ViewAllShowcase
+              <ViewAllProjects
                 index={FEATURED_PROJECTS.length}
                 count={total}
                 progress={driver}
@@ -110,8 +102,10 @@ export default function Projects() {
 
 function SectionHeader({ className }: { className?: string }) {
   return (
-    <header className={`container-page relative z-10 pt-24 md:pt-12 ${className ?? ''}`}>
-      <div className="mb-4 flex items-center gap-4">
+    <header
+      className={`container-page relative z-10 flex flex-col items-end pt-24 text-right md:pt-12 ${className ?? ''}`}
+    >
+      <div className="mb-4 flex flex-row-reverse items-center gap-4">
         <span aria-hidden="true" className="h-px w-7 bg-primary" />
         <p className="text-[10px] font-mono uppercase tracking-[0.26em] text-primary">
           Projects
@@ -124,20 +118,80 @@ function SectionHeader({ className }: { className?: string }) {
       </h2>
       <div
         aria-hidden="true"
-        className="mt-5 h-px bg-gradient-to-r from-primary via-border to-transparent"
+        className="mt-5 h-px w-full bg-gradient-to-l from-primary via-border to-transparent"
       />
     </header>
   )
 }
 
-interface ShowcaseProps {
-  project: Project
+interface IndicatorProps {
+  progress: MotionValue<number>
+  progressBarWidth: MotionValue<string>
+  total: number
+}
+
+function ScrollIndicator({
+  progress,
+  progressBarWidth,
+  total,
+}: IndicatorProps) {
+  const segments = Math.max(total - 1, 1)
+  const [current, setCurrent] = useState(1)
+
+  useMotionValueEvent(progress, 'change', p => {
+    const idx = Math.min(Math.max(Math.round(p * segments) + 1, 1), total)
+    setCurrent(prev => (prev === idx ? prev : idx))
+  })
+
+  return (
+    <div className="container-page relative z-10 pb-8 md:pb-10">
+      <div className="flex items-center gap-6">
+        <span className="font-mono text-xs uppercase tracking-[0.28em] text-muted tabular-nums">
+          {String(current).padStart(2, '0')}
+        </span>
+
+        <div className="relative h-px flex-1 overflow-hidden bg-border">
+          <motion.div
+            className="absolute inset-y-0 left-0 bg-foreground"
+            style={{ width: progressBarWidth }}
+          />
+          <div className="pointer-events-none absolute inset-0 flex justify-between">
+            {Array.from({ length: total }).map((_, i) => (
+              <span
+                key={i}
+                aria-hidden="true"
+                className={`h-2 w-px -translate-y-1/2 self-center ${
+                  i + 1 <= current ? 'bg-foreground' : 'bg-border'
+                }`}
+              />
+            ))}
+          </div>
+        </div>
+
+        <span className="font-mono text-xs uppercase tracking-[0.28em] text-muted tabular-nums">
+          {String(total).padStart(2, '0')}
+        </span>
+      </div>
+    </div>
+  )
+}
+
+interface CardProps {
   index: number
   count: number
   progress: MotionValue<number>
 }
 
-function ProjectShowcase({ project, index, count, progress }: ShowcaseProps) {
+interface ViewDetailProjectsProps extends CardProps {
+  project: Project
+}
+
+function ViewDetailProjects({
+  project,
+  index,
+  count,
+  progress,
+}: ViewDetailProjectsProps) {
   const segments = Math.max(count - 1, 1)
   const center = index / segments
 
@@ -172,11 +226,10 @@ function ProjectShowcase({ project, index, count, progress }: ShowcaseProps) {
       }}
     >
       <div className="grid h-[60vh] grid-cols-1 overflow-hidden rounded-2xl border border-border bg-surface/60 shadow-card backdrop-blur-sm lg:grid-cols-[1.15fr_1fr]">
-        {/* Image */}
         <div className="relative h-44 overflow-hidden bg-background/60 lg:h-full">
-          {project.image ? (
+          {project.images?.[0] ? (
             <Image
-              src={project.image}
+              src={project.images[0]}
               alt={`Preview of ${project.title}`}
               fill
               sizes="(max-width: 1024px) 70vw, 40vw"
@@ -193,10 +246,9 @@ function ProjectShowcase({ project, index, count, progress }: ShowcaseProps) {
           )}
         </div>
 
-        {/* Info */}
         <div className="flex flex-col justify-between gap-6 p-6 md:p-8 lg:p-10">
           <div className="flex items-start justify-between text-[11px] font-mono uppercase tracking-[0.22em] text-muted">
-            <span>{String(index + 1).padStart(2, '0')}</span>
+            <span>{String(index + 1).padStart(0, '0')}</span>
             <span className="text-right">
               {CATEGORIES[project.id] ?? 'Web Project'}
             </span>
@@ -215,9 +267,9 @@ function ProjectShowcase({ project, index, count, progress }: ShowcaseProps) {
               role="list"
               aria-label="Technologies used"
             >
-              {project.tags.map(tag => (
+              {project.tags.map((tag, i) => (
                 <li
-                  key={tag}
+                  key={`${tag}-${i}`}
                   className="rounded-full border border-border bg-background/40 px-3 py-1 text-[11px] font-mono text-muted"
                 >
                   {tag}
@@ -259,13 +311,7 @@ function ProjectShowcase({ project, index, count, progress }: ShowcaseProps) {
   )
 }
 
-interface ViewAllShowcaseProps {
-  index: number
-  count: number
-  progress: MotionValue<number>
-}
-
-function ViewAllShowcase({ index, count, progress }: ViewAllShowcaseProps) {
+function ViewAllProjects({ index, count, progress }: CardProps) {
   const segments = Math.max(count - 1, 1)
   const center = index / segments
 
@@ -334,62 +380,5 @@ function ViewAllShowcase({ index, count, progress }: ViewAllShowcaseProps) {
         </div>
       </Link>
     </motion.article>
-  )
-}
-
-interface IndicatorProps {
-  progress: MotionValue<number>
-  progressBarWidth: MotionValue<string>
-  total: number
-}
-
-function ScrollIndicator({
-  progress,
-  progressBarWidth,
-  total,
-}: IndicatorProps) {
-  const segments = Math.max(total - 1, 1)
-  const [current, setCurrent] = useState(1)
-
-  useMotionValueEvent(progress, 'change', p => {
-    const idx = Math.min(
-      Math.max(Math.round(p * segments) + 1, 1),
-      total,
-    )
-    setCurrent(prev => (prev === idx ? prev : idx))
-  })
-
-  return (
-    <div className="container-page relative z-10 pb-8 md:pb-10">
-      <div className="flex items-center gap-6">
-        <span className="font-mono text-xs uppercase tracking-[0.28em] text-muted tabular-nums">
-          {String(current).padStart(2, '0')}
-        </span>
-
-        {/* Progress line */}
-        <div className="relative h-px flex-1 overflow-hidden bg-border">
-          <motion.div
-            className="absolute inset-y-0 left-0 bg-foreground"
-            style={{ width: progressBarWidth }}
-          />
-          {/* Step ticks */}
-          <div className="pointer-events-none absolute inset-0 flex justify-between">
-            {Array.from({ length: total }).map((_, i) => (
-              <span
-                key={i}
-                aria-hidden="true"
-                className={`h-2 w-px -translate-y-1/2 self-center ${
-                  i + 1 <= current ? 'bg-foreground' : 'bg-border'
-                }`}
-              />
-            ))}
-          </div>
-        </div>
-
-        <span className="font-mono text-xs uppercase tracking-[0.28em] text-muted tabular-nums">
-          {String(total).padStart(2, '0')}
-        </span>
-      </div>
-    </div>
   )
 }

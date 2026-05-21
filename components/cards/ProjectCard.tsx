@@ -9,6 +9,7 @@ interface ProjectCardProps {
 }
 
 export default function ProjectCard({ project }: ProjectCardProps) {
+  const cover = project.images?.[0]
   return (
     <article
       className="group flex flex-col rounded-md border border-border bg-surface/40
@@ -16,9 +17,9 @@ export default function ProjectCard({ project }: ProjectCardProps) {
                  hover:border-primary hover:bg-surface/60"
     >
       <figure className="relative aspect-video w-full overflow-hidden bg-background/50">
-        {project.image ? (
+        {cover ? (
           <Image
-            src={project.image}
+            src={cover}
             alt={`Screenshot of ${project.title}`}
             fill
             sizes="(max-width: 768px) 100vw, 50vw"
@@ -31,16 +32,6 @@ export default function ProjectCard({ project }: ProjectCardProps) {
           >
             <ImageOff className="h-10 w-10 opacity-40" />
           </div>
-        )}
-
-        {project.featured && (
-          <span
-            className="absolute top-3 left-3 inline-flex items-center gap-1.5 rounded-full
-                       bg-primary/90 px-3 py-1 text-[11px] font-medium text-white
-                       backdrop-blur-sm"
-          >
-            &#9733; Featured
-          </span>
         )}
 
         <div
@@ -84,9 +75,9 @@ export default function ProjectCard({ project }: ProjectCardProps) {
         </p>
 
         <ul className="flex flex-wrap gap-2" role="list" aria-label="Technologies used">
-          {project.tags.map((tag) => (
+          {project.tags.map((tag, i) => (
             <li
-              key={tag}
+              key={`${tag}-${i}`}
               className="rounded-full border border-border px-2.5 py-0.5
                          text-[11px] font-mono text-muted"
             >
