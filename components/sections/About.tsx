@@ -12,17 +12,17 @@ const STORY_BLOCKS = [
   {
     number: '01',
     heading: 'Where It Started',
-    body: 'My interest in technology started early — taking machines apart, reading documentation I barely understood, building tiny things that did not quite work. The web was the first place where what I built could actually live somewhere, and that quiet thrill never left.',
+    body: 'My interest in technology started during the COVID era, when digital platforms and technology adoption were rapidly accelerating across everyday life. Watching how software could connect people, solve practical problems, and reshape the way businesses operated sparked my curiosity to explore programming and software development more deeply.',
   },
   {
     number: '02',
     heading: 'Learning the Skills',
-    body: 'As my curiosity grew, I started shaping it deliberately. Typography, interaction design, motion, and the engineering beneath premium interfaces — I learned that craft is the slow distance between something that works and something that feels right.',
+    body: 'To deepen my understanding of technology and software engineering, I pursued a Computer Science degree at BINUS University with a focus on Software Engineering. Through academic projects, research, and hands-on development experiences, I gradually built my skills in full stack development, mobile applications, UI/UX design, and system architecture while learning how to turn ideas into functional products.',
   },
   {
     number: '03',
     heading: 'My Experience',
-    body: 'My professional journey has included shipping production interfaces, collaborating with designers and product teams, and translating editorial ambition into code that performs. Each project is a study in restraint, precision, and pacing.',
+    body: 'My professional journey started at Periksa Solusi Indonesia as a Front End Engineer Intern, where I handled 12 modules using a sprint-based development workflow. I was also entrusted with developing the “Skrining Awal Pasien IGD” feature, which manages patients’ initial emergency screening information. This experience strengthened my ability to work in a fast-paced environment while building scalable and maintainable front-end features for real-world healthcare systems.',
   },
 ] as const
 
@@ -48,43 +48,36 @@ function StoryBlock({
   number,
   heading,
   body,
-  progress,
-  index,
-  total,
 }: {
   number: string
   heading: string
   body: string
-  progress: MotionValue<number>
-  index: number
-  total: number
 }) {
-  const totalScrollRange = 0.85
-  const blockStart = (index / total) * totalScrollRange
-  const blockEnd = blockStart + (totalScrollRange / total)
-  const duration = blockEnd - blockStart
+  const ref = useRef<HTMLElement>(null)
 
-  const step1 = blockStart
-  const step2 = blockStart + duration * 0.33
-  const step3 = blockStart + duration * 0.66
-  const step4 = blockEnd
+  // Each block animates relative to its OWN scroll position, so it works
+  // regardless of how tall the section is (stacked layout on mobile).
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ['start 0.9', 'start 0.35'],
+  })
 
   const PRE = 0.18
   const POST = 1
 
-  const numberOpacity = useTransform(progress, [step1, step2], [PRE, POST])
-  const numberBlur = useTransform(progress, [step1, step2], ['blur(8px)', 'blur(0px)'])
+  const numberOpacity = useTransform(scrollYProgress, [0, 0.4], [PRE, POST])
+  const numberBlur = useTransform(scrollYProgress, [0, 0.4], ['blur(8px)', 'blur(0px)'])
 
-  const headingOpacity = useTransform(progress, [step2, step3], [PRE, POST])
-  const headingY = useTransform(progress, [step2, step3], [15, 0])
-  const headingBlur = useTransform(progress, [step2, step3], ['blur(8px)', 'blur(0px)'])
+  const headingOpacity = useTransform(scrollYProgress, [0.2, 0.6], [PRE, POST])
+  const headingY = useTransform(scrollYProgress, [0.2, 0.6], [15, 0])
+  const headingBlur = useTransform(scrollYProgress, [0.2, 0.6], ['blur(8px)', 'blur(0px)'])
 
-  const paragraphOpacity = useTransform(progress, [step3, step4], [PRE, POST])
-  const paragraphY = useTransform(progress, [step3, step4], [15, 0])
-  const paragraphBlur = useTransform(progress, [step3, step4], ['blur(8px)', 'blur(0px)'])
+  const paragraphOpacity = useTransform(scrollYProgress, [0.4, 0.9], [PRE, POST])
+  const paragraphY = useTransform(scrollYProgress, [0.4, 0.9], [15, 0])
+  const paragraphBlur = useTransform(scrollYProgress, [0.4, 0.9], ['blur(8px)', 'blur(0px)'])
 
   return (
-    <article className="relative pb-8 sm:pb-12">
+    <article ref={ref} className="relative pb-8 sm:pb-12">
       <div className="grid grid-cols-[1fr_auto] items-start gap-x-8 sm:gap-x-12">
         <div className="text-right justify-self-end">
           <motion.h3
@@ -233,15 +226,12 @@ export default function About() {
           {/* LEFT — STORYTELLING */}
           <div className="lg:col-span-1 lg:order-first">
             <div className="space-y-4 lg:space-y-6">
-              {STORY_BLOCKS.map((b, index) => (
+              {STORY_BLOCKS.map((b) => (
                 <StoryBlock
                   key={b.number}
                   number={b.number}
                   heading={b.heading}
                   body={b.body}
-                  progress={scrollYProgress}
-                  index={index}
-                  total={STORY_BLOCKS.length}
                 />
               ))}
             </div>
