@@ -1,15 +1,16 @@
 'use client'
 
 import { useState, type FormEvent } from 'react'
+import { Github, Linkedin, Mail } from 'lucide-react'
 import { SlideEffect } from '../ui/SlideEffect'
 
 /**
  * Social / contact link data.
  */
 const SOCIAL_LINKS = [
-  { label: 'GitHub', href: 'https://github.com/julio', icon: 'GH' },
-  { label: 'LinkedIn', href: 'https://linkedin.com/in/julio', icon: 'LI' },
-  { label: 'Email', href: 'mailto:julio@example.com', icon: '@' },
+  { label: 'GitHub', href: 'https://github.com/julioabcde', Icon: Github },
+  { label: 'LinkedIn', href: 'https://www.linkedin.com/in/julio68', Icon: Linkedin },
+  { label: 'Email', href: 'mailto:media.julio68@gmail.com', Icon: Mail },
 ] as const
 
 export default function Contact() {
@@ -107,16 +108,11 @@ export default function Contact() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={link.label}
-                  className="group flex h-11 w-11 items-center justify-center rounded-md
-                             border border-border text-sm font-mono text-muted overflow-hidden"
+                  className="flex h-11 w-11 items-center justify-center rounded-xl
+                             border border-border text-muted transition-colors
+                             hover:border-primary hover:text-primary"
                 >
-                  <SlideEffect
-                    fillColor="bg-primary/10"
-                    fillTextColor="text-primary"
-                    duration={250}
-                  >
-                    {link.icon}
-                  </SlideEffect>
+                  <link.Icon className="h-[18px] w-[18px]" aria-hidden="true" />
                 </a>
               ))}
             </nav>
@@ -124,7 +120,7 @@ export default function Contact() {
 
           {/* RIGHT COLUMN - Form */}
           <div className="relative">
-            <div className="relative rounded-md border border-border bg-surface/40 backdrop-blur-sm p-6 md:p-8">
+            <div className="relative rounded-3xl border border-border bg-surface/40 backdrop-blur-sm p-6 md:p-8">
               {submitted ? (
                 <div role="status" className="text-center py-12 space-y-4">
                   <p className="text-4xl" aria-hidden="true">✓</p>
@@ -148,7 +144,21 @@ export default function Contact() {
                   </button>
                 </div>
               ) : (
-                <form onSubmit={handleSubmit} className="space-y-5">
+                <>
+                  {/* Form header */}
+                  <header className="mb-6 border-b border-border pb-5">
+                    <p className="text-[10px] font-mono uppercase tracking-[0.26em] text-primary">
+                      Get in touch
+                    </p>
+                    <h3 className="mt-2 text-xl font-semibold tracking-tight text-foreground">
+                      Send me a message
+                    </h3>
+                    <p className="mt-1 text-sm text-muted">
+                      Fill out the form below and I&rsquo;ll get back to you shortly.
+                    </p>
+                  </header>
+
+                  <form onSubmit={handleSubmit} className="space-y-5">
                   {/* Honeypot - hidden from users, bots will fill this */}
                   <input
                     type="text"
@@ -163,7 +173,7 @@ export default function Contact() {
                   {error && (
                     <div
                       role="alert"
-                      className="rounded-lg border border-red-500/40 bg-red-500/10 px-4 py-3 text-sm text-red-700"
+                      className="rounded-xl border border-red-500/40 bg-red-500/10 px-4 py-3 text-sm text-red-700"
                     >
                       {error}
                     </div>
@@ -185,7 +195,7 @@ export default function Contact() {
                         required
                         autoComplete="given-name"
                         placeholder="John"
-                        className="w-full rounded-lg border border-border bg-surface px-4 py-3
+                        className="w-full rounded-xl border border-border bg-surface px-4 py-3
                                    text-sm text-foreground caret-secondary placeholder:text-muted/60
                                    transition-all duration-300
                                    hover:border-muted/50
@@ -207,7 +217,7 @@ export default function Contact() {
                         required
                         autoComplete="family-name"
                         placeholder="Doe"
-                        className="w-full rounded-lg border border-border bg-surface px-4 py-3
+                        className="w-full rounded-xl border border-border bg-surface px-4 py-3
                                    text-sm text-foreground caret-secondary placeholder:text-muted/60
                                    transition-all duration-300
                                    hover:border-muted/50
@@ -232,7 +242,7 @@ export default function Contact() {
                       required
                       autoComplete="email"
                       placeholder="john@example.com"
-                      className="w-full rounded-lg border border-border bg-surface px-4 py-3
+                      className="w-full rounded-xl border border-border bg-surface px-4 py-3
                                  text-sm text-foreground caret-secondary placeholder:text-muted/60
                                  transition-all duration-300
                                  hover:border-muted/50
@@ -254,8 +264,8 @@ export default function Contact() {
                       name="message"
                       required
                       rows={5}
-                      placeholder="Tell me about your project..."
-                      className="w-full resize-y rounded-lg border border-border bg-surface px-4 py-3
+                      placeholder="Hello! I have a project in mind and would love to discuss it with you."
+                      className="w-full resize-y rounded-xl border border-border bg-surface px-4 py-3
                                  text-sm text-foreground caret-secondary placeholder:text-muted/60
                                  transition-all duration-300
                                  hover:border-muted/50
@@ -266,7 +276,7 @@ export default function Contact() {
 
                   {/* Footer: terms + submit */}
                   <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pt-2">
-                    <p className="text-[11px] text-muted/70 max-w-[220px] leading-relaxed">
+                    <p className="text-sm text-muted/70 max-w-[300px] leading-relaxed">
                       <span className="text-primary">Your message</span> will be sent directly to my email.
                       <br />
                       I typically respond within <span className="text-secondary">24-48 hours</span>.
@@ -276,7 +286,7 @@ export default function Contact() {
                       type="submit"
                       disabled={isSubmitting}
                       className="group relative inline-flex items-center justify-center
-                                 overflow-hidden rounded-lg border border-primary
+                                 overflow-hidden rounded-xl border border-primary
                                  h-12 px-6 text-sm font-medium text-primary
                                  disabled:opacity-50 disabled:cursor-not-allowed"
                     >
@@ -298,7 +308,8 @@ export default function Contact() {
                       )}
                     </button>
                   </div>
-                </form>
+                  </form>
+                </>
               )}
             </div>
           </div>

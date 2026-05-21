@@ -49,15 +49,8 @@ export default function NavLinks({ links, activeId, className }: NavLinksProps) 
                             'relative text-[12px] font-bold tracking-[0.1em] uppercase',
                             'transition-colors duration-200',
                             isActive
-                                ? 'text-secondary'           
-                                : 'text-foreground/50 hover:text-secondary',
-                            isActive && [
-                                "after:content-['']",
-                                'after:absolute after:left-1/2 after:-translate-x-1/2',
-                                'after:-bottom-1.5',
-                                'after:w-1 after:h-1',
-                                'after:bg-secondary after:rounded-full',
-                            ]
+                                ? 'text-secondary'
+                                : 'text-foreground/50 hover:text-secondary'
                         )}
                     >
                         {link.label}
