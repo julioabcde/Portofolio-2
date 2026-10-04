@@ -5,7 +5,7 @@ export const PROFILE = {
   introduction:
     'Fresh Computer Science graduate with one year of professional frontend experience building and improving production healthcare applications.',
   cvUrl:
-    'https://drive.google.com/file/d/1U6K3ozL6bgnphPxq88YSuw2T5OQShL6S/view?usp=sharing',
+    'https://drive.google.com/file/d/1FUyMBVc2SiLMrtJpKbyOcr7k4yEUMrgf/view?usp=sharing',
   portrait: '/julio_hero_circle.png',
   email: 'media.julio68@gmail.com',
 } as const
