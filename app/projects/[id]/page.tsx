@@ -4,6 +4,11 @@ import { notFound } from 'next/navigation'
 import { ArrowLeft, ArrowRight, ArrowUpRight } from 'lucide-react'
 import { PROJECTS, getProjectById, CATEGORIES } from '@/lib/data/project'
 import ProjectCarousel from './ProjectCarousel'
+import MobileProjectCarousel from './MobileProjectCarousel'
+import Footer from '@/components/layout/Footer'
+import MobileShell from '@/components/layout/MobileShell'
+import ShellLink from '@/components/layout/ShellLink'
+import Button from '@/components/ui/Button'
 
 interface PageProps {
   params: Promise<{ id: string }>
@@ -39,6 +44,11 @@ export default async function ProjectDetailPage({ params }: PageProps) {
     CATEGORIES[nextProject.id] ?? nextProject.type ?? 'Web Project'
 
   return (
+    <>
+    <div className="lg:hidden">
+      <MobileProjectDetail project={project} category={category} hasLiveUrl={!!hasLiveUrl} hasRepoUrl={!!hasRepoUrl} />
+    </div>
+    <div className="hidden lg:block">
     <main className="min-h-screen bg-background text-foreground">
       <div className="mx-auto w-full max-w-container px-margin-x-sm md:px-margin-x-md lg:px-margin-x-lg pt-12 pb-24">
         <div className="flex items-center justify-between border-b border-border pb-4">
@@ -243,6 +253,150 @@ export default async function ProjectDetailPage({ params }: PageProps) {
         </section>
       </div>
     </main>
+    </div>
+    </>
+  )
+}
+
+function MobileProjectDetail({
+  project,
+  category,
+  hasLiveUrl,
+  hasRepoUrl,
+}: {
+  project: NonNullable<ReturnType<typeof getProjectById>>
+  category: string
+  hasLiveUrl: boolean
+  hasRepoUrl: boolean
+}) {
+  const fields = [
+    ['Role', project.role],
+    ['Type', project.type],
+    ['Year', project.year],
+    ['Engagement', project.engagement],
+    ['Status', project.status],
+  ].filter((field): field is [string, string] => Boolean(field[1]))
+  const label = 'mb-4 font-mono text-[10px] uppercase tracking-[0.26em] text-primary'
+  return (
+    <>
+      <main>
+        <MobileShell nameAsHeading={false}>
+          <article className="border-b border-border">
+            <div className="sticky top-14 z-30 border-b border-border bg-[rgba(245,242,237,0.95)] backdrop-blur-md">
+              <div className="flex h-12 items-center justify-between gap-3 px-4">
+                <ShellLink
+                  href="/projects"
+                  className="inline-flex min-h-11 items-center gap-1.5 text-sm font-medium text-muted transition-colors hover:text-primary"
+                >
+                  <ArrowLeft aria-hidden="true" className="h-4 w-4" />
+                  Projects
+                </ShellLink>
+                <span className="min-w-0 truncate font-display text-[15px] italic text-muted">
+                  {category}
+                </span>
+              </div>
+            </div>
+
+            <header className="space-y-5 px-4 pb-8 pt-6">
+              <h1 className="text-balance font-display text-3xl font-bold tracking-tight">
+                {project.title}
+                <span aria-hidden="true" className="text-primary">.</span>
+              </h1>
+              <p className="leading-7 text-muted">{project.description}</p>
+              {(hasLiveUrl || hasRepoUrl) && (
+                <div className="flex flex-wrap gap-3">
+                  {hasLiveUrl && (
+                    <Button href={project.liveUrl!} external>
+                      Live Demo
+                    </Button>
+                  )}
+                  {hasRepoUrl && (
+                    <Button href={project.repoUrl!} external secondary>
+                      Source Code
+                    </Button>
+                  )}
+                </div>
+              )}
+            </header>
+
+            {project.images && project.images.length > 0 && (
+              <section aria-label="Screenshots" className="border-y border-border px-4 py-6">
+                <MobileProjectCarousel images={project.images} title={project.title} />
+              </section>
+            )}
+
+            {fields.length > 0 && (
+              <dl className="grid grid-cols-2 gap-px border-b border-border bg-border">
+                {fields.map(([name, value], i) => (
+                  <div
+                    key={name}
+                    className={
+                      'bg-background px-4 py-5 ' +
+                      (i === 0 || (i === fields.length - 1 && fields.length % 2 === 0)
+                        ? 'col-span-2'
+                        : '')
+                    }
+                  >
+                    <dt className="mb-1 font-mono text-[10px] uppercase tracking-[0.26em] text-muted">
+                      {name}
+                    </dt>
+                    <dd className="text-sm">{value}</dd>
+                  </div>
+                ))}
+              </dl>
+            )}
+
+            {project.summary && (
+              <section className="border-b border-border px-4 py-8">
+                <h2 className={label}>Summary</h2>
+                <p className="text-[15px] leading-7 text-muted">{project.summary}</p>
+              </section>
+            )}
+
+            {project.impact && (
+              <section className="border-b border-border px-4 py-8">
+                <h2 className={label}>Impact</h2>
+                <p className="text-[15px] leading-7 text-muted">{project.impact}</p>
+              </section>
+            )}
+
+            {(project.learnings || project.learningPoints?.length) && (
+              <section className="border-b border-border px-4 py-8">
+                <h2 className={label}>What I learned</h2>
+                {project.learnings && (
+                  <p className="text-[15px] leading-7 text-muted">{project.learnings}</p>
+                )}
+                {project.learningPoints && (
+                  <ul className="mt-5 space-y-3">
+                    {project.learningPoints.map((point, i) => (
+                      <li key={i} className="flex items-baseline gap-3 text-sm leading-7">
+                        <span className="shrink-0 font-display text-base italic text-primary">
+                          {String(i + 1).padStart(2, '0')}
+                        </span>
+                        <span>{point}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </section>
+            )}
+
+            <section className="px-4 py-8">
+              <h2 className={label}>Stack</h2>
+              <ul className="flex flex-wrap gap-1.5">
+                {project.tags.map((tag) => (
+                  <li key={tag} className="chip text-muted">
+                    {tag}
+                  </li>
+                ))}
+              </ul>
+            </section>
+          </article>
+          <div aria-hidden="true" className="hatch h-8 border-b border-border" />
+        </MobileShell>
+      </main>
+      <Footer />
+    </>
   )
 }
 
