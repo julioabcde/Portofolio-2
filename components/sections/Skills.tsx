@@ -1,7 +1,8 @@
-
 'use client'
 
 import { useEffect, useState } from 'react'
+import { useDesktop } from '@/lib/hooks/useDesktop'
+import { ROWS, type RowDef, type SkillItem } from '@/lib/data/skills'
 
 function shuffle<T>(arr: T[]): T[] {
   const a = [...arr]
@@ -12,72 +13,57 @@ function shuffle<T>(arr: T[]): T[] {
   return a
 }
 
-type SkillItem = {
-  name: string
-  icon?: string
-}
-
-type RowDef = {
-  roman: string
-  label: string
-  items: SkillItem[]
-  duration: number
-  direction: 'left' | 'right'
-}
-
-const ROWS: RowDef[] = [
-  {
-    roman: 'I',
-    label: 'Languages',
-    items: [
-      { name: 'C', icon: 'c' },
-      { name: 'C++', icon: 'cplusplus' },
-      { name: 'Java', icon: 'openjdk' },
-      { name: 'JavaScript', icon: 'javascript' },
-      { name: 'TypeScript', icon: 'typescript' },
-      { name: 'Kotlin', icon: 'kotlin' },
-      { name: 'Dart', icon: 'dart' },
-      { name: 'PHP', icon: 'php' },
-    ],
-    duration: 36,
-    direction: 'left',
-  },
-  {
-    roman: 'II',
-    label: 'Frameworks',
-    items: [
-      { name: 'ASP.NET', icon: 'dotnet' },
-      { name: 'Angular', icon: 'angular' },
-      { name: 'Next.js', icon: 'nextdotjs' },
-      { name: 'Laravel', icon: 'laravel' },
-      { name: 'React Native', icon: 'react' },
-      { name: 'Flutter', icon: 'flutter' },
-      { name: 'Tauri', icon: 'tauri' },
-    ],
-    duration: 44,
-    direction: 'right',
-  },
-  {
-    roman: 'III',
-    label: 'Tools',
-    items: [
-      { name: 'Android Studio', icon: 'androidstudio' },
-      { name: 'Visual Studio Code', icon: 'vscodium' },
-      { name: 'Eclipse', icon: 'eclipseide' },
-      { name: 'Git', icon: 'git' },
-      { name: 'Figma', icon: 'figma' },
-      { name: 'Postman', icon: 'postman' },
-      { name: 'Swagger', icon: 'swagger' },
-      { name: 'DBeaver', icon: 'dbeaver' },
-      { name: 'MySQL Workbench', icon: 'mysql' },
-      { name: 'Notion', icon: 'notion' },
-    ],
-    duration: 55,
-    direction: 'left',
-  },
-]
-
 export default function Skills() {
+  const desktop = useDesktop()
+  if (!desktop)
+    return (
+      <section
+        id="skills"
+        aria-labelledby="skills-heading"
+        className="border-b border-border"
+      >
+        <header className="panel-header">
+          <h2 id="skills-heading" className="panel-title">
+            Stack
+          </h2>
+        </header>
+        {ROWS.map((row, index) => (
+          <div
+            key={row.label}
+            className="space-y-2 border-b border-border py-4 last:border-b-0"
+          >
+            <h3 className="px-4 text-sm leading-6 text-muted">
+              <span className="mr-1.5 font-mono text-primary">
+                {String(index + 1).padStart(2, '0')}
+              </span>
+              {row.label}
+            </h3>
+            <ul aria-label={row.label} className="flex flex-wrap gap-1.5 px-4">
+              {row.items.map((item) => (
+                <li key={item.name} className="chip">
+                  {item.icon && (
+                    <span
+                      aria-hidden="true"
+                      className="inline-block h-3.5 w-3.5 shrink-0 bg-[rgba(10,9,8,0.7)]"
+                      style={{
+                        maskImage: `url("https://cdn.simpleicons.org/${item.icon}")`,
+                        WebkitMaskImage: `url("https://cdn.simpleicons.org/${item.icon}")`,
+                        maskRepeat: 'no-repeat',
+                        WebkitMaskRepeat: 'no-repeat',
+                        maskSize: 'contain',
+                        WebkitMaskSize: 'contain',
+                      }}
+                    />
+                  )}
+                  {item.name}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </section>
+    )
+
   return (
     <section
       id="skills"
@@ -123,7 +109,7 @@ export default function Skills() {
 
           {/* Rows */}
           <div className="space-y-12 md:space-y-14">
-            {ROWS.map(row => (
+            {ROWS.map((row) => (
               <MarqueeRow key={row.roman} {...row} />
             ))}
           </div>
@@ -133,17 +119,8 @@ export default function Skills() {
   )
 }
 
-function MarqueeRow({
-  roman,
-  label,
-  items,
-  duration,
-  direction,
-}: RowDef) {
-  const animationName =
-    direction === 'left'
-      ? 'marquee'
-      : 'marquee-reverse'
+function MarqueeRow({ roman, label, items, duration, direction }: RowDef) {
+  const animationName = direction === 'left' ? 'marquee' : 'marquee-reverse'
 
   const [order, setOrder] = useState<SkillItem[]>(items)
   useEffect(() => {
@@ -166,10 +143,7 @@ function MarqueeRow({
       </div>
 
       {/* Divider */}
-      <div
-        aria-hidden="true"
-        className="mt-3 h-px w-full bg-black/[0.06]"
-      />
+      <div aria-hidden="true" className="mt-3 h-px w-full bg-black/[0.06]" />
 
       {/* Track */}
       <div
@@ -242,7 +216,7 @@ function MarqueeRow({
 
                 <span>{item.name}</span>
               </li>
-            ))
+            )),
           )}
         </ul>
       </div>

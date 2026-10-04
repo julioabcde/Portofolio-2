@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-import { validateContactForm } from '@/validators'
+import { validateContactForm } from '@/validators/contact'
 import { checkRateLimit } from '@/lib/rate-limiter'
 import { sendEmail, buildEmailHtml } from '@/lib/mailer'
 import { escapeHtml } from '@/utils/escapeHtml'

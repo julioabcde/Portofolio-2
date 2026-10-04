@@ -12,7 +12,7 @@ export function smoothScrollToHash(href: string, lenis: Lenis | null): boolean {
   if (lenis) {
     lenis.scrollTo(target, { offset: -HEADER_OFFSET })
   } else {
-    target.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    target.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth', block: 'start' })
   }
 
   history.pushState(null, '', href)

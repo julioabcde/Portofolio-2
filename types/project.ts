@@ -1,6 +1,7 @@
 export interface Project {
   id: string
   title: string
+  platform?: 'web' | 'mobile' | 'desktop'
   description: string
   images?: string[]
   summary?: string

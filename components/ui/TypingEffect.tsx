@@ -1,44 +1,15 @@
 'use client'
-import { useEffect, useState, useCallback, useRef } from 'react'
+import { useEffect, useState } from 'react'
 import clsx from 'clsx'
 
-type TypingPhase = 'typing' | 'pausing' | 'deleting' | 'waiting'
-
 interface TypingEffectProps {
-  /** Array of words/phrases to cycle through */
   words: string[]
-  /** Typing speed in milliseconds per character */
   typingSpeed?: number
-  /** Deleting speed in milliseconds per character */
   deletingSpeed?: number
-  /** Pause duration after typing completes (ms) */
   pauseDuration?: number
-  /** Delay before starting to type next word (ms) */
-  waitDuration?: number
-  /** Whether to show the cursor */
   showCursor?: boolean
-  /** Custom cursor character */
   cursorChar?: string
-  /** Custom classes for the container */
   className?: string
-  /** Custom classes for the text */
-  textClassName?: string
-  /** Custom classes for the cursor */
-  cursorClassName?: string
-  /** Whether to loop through words infinitely */
-  loop?: boolean
-  /** Callback when a word is fully typed */
-  onWordComplete?: (word: string, index: number) => void
-  /** Callback when all words are typed (only fires if loop is false) */
-  onComplete?: () => void
-  /** Enable smooth easing for more natural typing rhythm */
-  smoothTyping?: boolean
-}
-
-function getRandomizedSpeed(baseSpeed: number, variation: number = 0.4): number {
-  const min = baseSpeed * (1 - variation)
-  const max = baseSpeed * (1 + variation)
-  return Math.floor(Math.random() * (max - min + 1)) + min
 }
 
 export function TypingEffect({
@@ -46,147 +17,40 @@ export function TypingEffect({
   typingSpeed = 100,
   deletingSpeed = 60,
   pauseDuration = 2000,
-  waitDuration = 300,
   showCursor = true,
   cursorChar = '|',
   className,
-  textClassName,
-  cursorClassName,
-  loop = true,
-  onWordComplete,
-  onComplete,
-  smoothTyping = true,
 }: TypingEffectProps) {
-  const [displayText, setDisplayText] = useState('')
+  const [text, setText] = useState('')
   const [wordIndex, setWordIndex] = useState(0)
-  const [phase, setPhase] = useState<TypingPhase>('typing')
-  const [isComplete, setIsComplete] = useState(false)
-  
-  // Refs for cleanup
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null)
-  const isMountedRef = useRef(true)
-
-  // Clear timeout helper
-  const clearCurrentTimeout = useCallback(() => {
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current)
-      timeoutRef.current = null
-    }
-  }, [])
-
-  // Get speed with optional randomization for natural feel
-  const getSpeed = useCallback(
-    (baseSpeed: number) => {
-      return smoothTyping ? getRandomizedSpeed(baseSpeed) : baseSpeed
-    },
-    [smoothTyping]
-  )
+  const [deleting, setDeleting] = useState(false)
 
   useEffect(() => {
-    isMountedRef.current = true
-    return () => {
-      isMountedRef.current = false
-      clearCurrentTimeout()
+    if (words.length === 0) return
+    const word = words[wordIndex]
+
+    // Fully typed: pause, then start deleting.
+    if (!deleting && text === word) {
+      const t = setTimeout(() => setDeleting(true), pauseDuration)
+      return () => clearTimeout(t)
     }
-  }, [clearCurrentTimeout])
-
-  useEffect(() => {
-    if (!isMountedRef.current || words.length === 0) return
-    if (isComplete) return
-
-    const currentWord = words[wordIndex]
-    clearCurrentTimeout()
-
-    switch (phase) {
-      case 'typing': {
-        if (displayText.length < currentWord.length) {
-          // Continue typing
-          timeoutRef.current = setTimeout(() => {
-            if (isMountedRef.current) {
-              setDisplayText(currentWord.slice(0, displayText.length + 1))
-            }
-          }, getSpeed(typingSpeed))
-        } else {
-          // Word complete, start pausing
-          onWordComplete?.(currentWord, wordIndex)
-          setPhase('pausing')
-        }
-        break
-      }
-
-      case 'pausing': {
-        timeoutRef.current = setTimeout(() => {
-          if (isMountedRef.current) {
-            setPhase('deleting')
-          }
-        }, pauseDuration)
-        break
-      }
-
-      case 'deleting': {
-        if (displayText.length > 0) {
-          // Continue deleting
-          timeoutRef.current = setTimeout(() => {
-            if (isMountedRef.current) {
-              setDisplayText(displayText.slice(0, -1))
-            }
-          }, getSpeed(deletingSpeed))
-        } else {
-          // Deletion complete
-          const nextIndex = wordIndex + 1
-          
-          if (nextIndex >= words.length && !loop) {
-            // All words done, not looping
-            setIsComplete(true)
-            onComplete?.()
-          } else {
-            // Move to next word
-            setWordIndex(nextIndex % words.length)
-            setPhase('waiting')
-          }
-        }
-        break
-      }
-
-      case 'waiting': {
-        timeoutRef.current = setTimeout(() => {
-          if (isMountedRef.current) {
-            setPhase('typing')
-          }
-        }, waitDuration)
-        break
-      }
+    // Fully deleted: advance to next word.
+    if (deleting && text === '') {
+      setDeleting(false)
+      setWordIndex((i) => (i + 1) % words.length)
+      return
     }
 
-    return clearCurrentTimeout
-  }, [
-    displayText,
-    phase,
-    wordIndex,
-    words,
-    typingSpeed,
-    deletingSpeed,
-    pauseDuration,
-    waitDuration,
-    loop,
-    isComplete,
-    getSpeed,
-    clearCurrentTimeout,
-    onWordComplete,
-    onComplete,
-  ])
+    const next = deleting ? word.slice(0, text.length - 1) : word.slice(0, text.length + 1)
+    const t = setTimeout(() => setText(next), deleting ? deletingSpeed : typingSpeed)
+    return () => clearTimeout(t)
+  }, [text, deleting, wordIndex, words, typingSpeed, deletingSpeed, pauseDuration])
 
   return (
     <span className={clsx('inline-flex items-baseline', className)}>
-      <span className={textClassName}>{displayText}</span>
+      <span>{text}</span>
       {showCursor && (
-        <span
-          className={clsx(
-            'inline-block ml-0.5 animate-blink',
-            cursorClassName
-          )}
-          aria-hidden="true"
-        >
+        <span className="inline-block ml-0.5 animate-blink" aria-hidden="true">
           {cursorChar}
         </span>
       )}
