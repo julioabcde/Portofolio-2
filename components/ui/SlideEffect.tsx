@@ -37,7 +37,9 @@ export function SlideEffect({
                 >
                     {children}
                 </span>
+                {/* Hover copy is purely visual — hide it so the accessible name isn't doubled. */}
                 <span
+                    aria-hidden="true"
                     className={clsx(
                         'absolute inset-0 flex items-center justify-center translate-y-full group-hover:translate-y-0',
                         'transition-transform motion-reduce:transition-none',

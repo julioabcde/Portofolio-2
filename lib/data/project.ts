@@ -17,7 +17,7 @@ export const PROJECTS: Project[] = [
     title: 'Vhotel',
     description:
       'A modern digital presence for a simulated hotel brand, built as a final assessment for Human and Computer Interaction.',
-    images: [],
+    images: ['/projects/vhotel/home.png', '/projects/vhotel/about-us.png', '/projects/vhotel/our-rooms.png', '/projects/vhotel/our-facilities.png', '/projects/vhotel/reservation.png'],
     summary:
       "Vhotel was a final assessment project for the Human and Computer Interaction course at BINUS University, where I designed a high-fidelity hotel website prototype in Figma and developed it into a functional website using HTML, CSS, and JavaScript. The project focused on creating a modern and user-friendly digital experience for a hotel booking platform.",
     type: 'Individual',
@@ -31,7 +31,7 @@ export const PROJECTS: Project[] = [
       'Structuring and naming components early helps maintain consistency and avoid repetitive design patterns.',
     ],
     year: '2023',
-    role: 'UX Designer & Frontend',
+    role: 'UI/UX, Frontend Developer',
     engagement: '1 Month',
     status: 'Course submitted',
     tags: ['HTML', 'CSS', 'JavaScript', 'Figma'],
@@ -43,7 +43,7 @@ export const PROJECTS: Project[] = [
     title: 'Velocart',
     description:
       'A comprehensive Point of Sales system with inventory management, transaction processing, preorder functionality, and Market Basket Analysis.',
-    images: ['/velocart.png', '/id.png', '/julio_hero.png'],
+    images: ['/projects/velocart/dashboard.png', '/projects/velocart/point-of-sales.png', '/projects/velocart/master-product.png', '/projects/velocart/market-basket-analysis.png', '/projects/velocart/transaction-report.png'],
     summary:
       'Velocart is a web-based point of sales application developed as a final thesis project. The system integrates Market Basket Analysis to help identify purchasing patterns and support better product recommendation and sales strategies.',
     type: 'Group Project',
@@ -57,7 +57,7 @@ export const PROJECTS: Project[] = [
       'Building data-driven features such as Market Basket Analysis helped me better understand how software can support business decision-making.',
     ],
     year: '2025',
-    role: 'Product Designer & Full-stack',
+    role: 'Fullstack Developer',
     engagement: '5-6 Months',
     status: 'Live in production',
     tags: ['Next.js', 'TailwindCSS', 'Laravel', 'MySQL'],
@@ -65,10 +65,11 @@ export const PROJECTS: Project[] = [
   },
   {
     id: 'pocketree',
+    platform: 'mobile',
     title: 'Pocketree',
     description:
       'A personal-finance app that frames money as a tree you tend — categories grow, leaks prune, healthy habits compound.',
-    images: [],
+    images: ['/projects/pocketree/home.png', '/projects/pocketree/add-transaction.png', '/projects/pocketree/split-bill.png', '/projects/pocketree/authentication.png'],
     summary:
       'Pocketree is a mobile financial management application built to explore Flutter development while addressing personal finance management in a more practical way. One of its core additional features is split bill functionality, inspired by the observation of how services like LINE SplitBill disappeared while GoPay Split Bill continued to remain relevant for users.',
     type: 'Self-initiated',
@@ -91,10 +92,11 @@ export const PROJECTS: Project[] = [
   },
   {
     id: 'dimsummaster',
+    platform: 'mobile',
     title: 'DimsumMaster',
     description:
       'An ordering and kitchen-display system for a family-owned dimsum restaurant — built to match the cart-to-table rhythm of real service.',
-    images: [],
+    images: ['/projects/dimsummaster/Screenshot_20260617_005607.png', '/projects/dimsummaster/Screenshot_20260617_014334.png', '/projects/dimsummaster/Screenshot_20260617_014407.png', '/projects/dimsummaster/Screenshot_20260617_014442.png'],
     summary:
       'DimSumMaster is a mobile food ordering application developed as the final project for the Mobile Programming course at BINUS University. The application allows users to browse and order restaurant menu items digitally, while also providing an admin interface for managing orders and menu data.',
     type: 'Group Project',
@@ -143,6 +145,7 @@ export const PROJECTS: Project[] = [
   },
     {
     id: 'stellar',
+    platform: 'desktop',
     title: 'Stellar',
     description:
       'An interactive event management platform focused on scheduling, registration, and attendee management.',
@@ -198,3 +201,5 @@ export const PROJECTS: Project[] = [
 export function getProjectById(id: string): Project | undefined {
   return PROJECTS.find(p => p.id === id)
 }
+
+export const FEATURED_PROJECTS = ['velocart', 'pocketree', 'vhotel'].flatMap(id => PROJECTS.filter(project => project.id === id))

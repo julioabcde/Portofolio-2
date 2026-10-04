@@ -1,9 +1,7 @@
-import type { RateLimitEntry } from '@/types/contact'
-
 const MAX_REQUESTS = 5
 const RATE_WINDOW_MS = 60_000 // 1 minute
 
-const rateLimitStore = new Map<string, RateLimitEntry>()
+const rateLimitStore = new Map<string, { count: number; timestamp: number }>()
 
 /**
  * Check if an IP address has exceeded the rate limit.
